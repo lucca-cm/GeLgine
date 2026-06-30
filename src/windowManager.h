@@ -7,7 +7,20 @@ class WindowManager {
     public:
         WindowManager();
         ~WindowManager();
-        bool shouldExit() {
+
+        bool shouldExit() const {
             return glfwWindowShouldClose(window);
         } 
+
+        void pollEvents() {
+            glfwPollEvents();
+        }
+
+        void swapBuffers() {
+            glfwSwapBuffers(window);
+        }
+
+        bool isKeyDown(int key) {
+            return glfwGetKey(window, key) == GLFW_PRESS;
+        }
 };
