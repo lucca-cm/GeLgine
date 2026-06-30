@@ -7,5 +7,7 @@ class WindowManager {
     public:
         WindowManager();
         ~WindowManager();
-        
+        bool shouldExit() {
+            return glfwWindowShouldClose(window);
+        } 
 };
