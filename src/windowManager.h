@@ -20,7 +20,7 @@ class WindowManager {
             glfwSwapBuffers(window);
         }
 
-        bool isKeyDown(int key) {
+        bool isKeyDown(int key) const {
             return glfwGetKey(window, key) == GLFW_PRESS;
         }
 };
