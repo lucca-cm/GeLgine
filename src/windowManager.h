@@ -5,12 +5,14 @@
 
 class WindowManager {
     private:
-        GLFWwindow* window;
+        GLFWwindow* window = nullptr;
     public:
         WindowManager();
         ~WindowManager();
 
         bool shouldExit() const {
+            if (!window) 
+                return true;
             return glfwWindowShouldClose(window);
         } 
 
