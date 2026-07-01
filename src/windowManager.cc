@@ -2,7 +2,7 @@
 
 WindowManager::WindowManager() {
     if (!glfwInit()) {
-        std::cout << "Failed to initialize GLFW\n";
+        std::cerr << "Failed to initialize GLFW" << std::endl;
         return;
     }
 
@@ -14,12 +14,17 @@ WindowManager::WindowManager() {
     window = glfwCreateWindow(800, 600, "OpenGL window", NULL, NULL);
 
     if (!window) {
-        std::cout << "Failed to create window\n";
+        std::cerr << "Failed to create window\n";
         glfwTerminate();
         return;
     }
 
     glfwMakeContextCurrent(window);
+
+    if (glewInit() != GLEW_OK) {
+        std::cerr << "Failed to initialize GLEW" << std::endl;
+        return;
+    }
 }
 
 WindowManager::~WindowManager() {
