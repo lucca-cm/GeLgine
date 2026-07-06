@@ -1,15 +1,16 @@
 CXX := clang++
-#CXXFLAGS := -std=c++17 -Wall -Wextra -Iinclude
 
-# Linux
-# LDFLAGS := -lGLEW -lglfw -lGL
+CXXFLAGS := -std=c++17 -Wall -Wextra \
+-Iinclude -I/opt/homebrew/include
 
-# macOS
-CXXFLAGS := -std=c++17 -Wall -Wextra -Iinclude -I/opt/homebrew/include
-LDFLAGS := -L/opt/homebrew/lib -lGLEW -lglfw -framework OpenGL
+LDFLAGS := -L/opt/homebrew/lib \
+-lglfw -framework OpenGL
 
-SRC := $(wildcard src/*.cc)
-OBJ := $(patsubst src/%.cc,build/%.o,$(SRC))
+SRC_CPP := $(wildcard src/*.cc)
+SRC_C := $(wildcard src/*.c)
+
+OBJ := $(patsubst src/%.cc,build/%.o,$(SRC_CPP)) \
+       $(patsubst src/%.c,build/%.o,$(SRC_C))
 
 TARGET := app
 
@@ -21,6 +22,10 @@ $(TARGET): $(OBJ)
 build/%.o: src/%.cc
 	@mkdir -p build
 	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+build/%.o: src/%.c
+	@mkdir -p build
+	clang -std=c11 -Wall -Wextra -Iinclude -c $< -o $@
 
 clean:
 	rm -rf build $(TARGET)
