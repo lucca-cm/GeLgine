@@ -23,6 +23,12 @@ class Shader {
             glDeleteShader(vertex);
             glDeleteShader(fragment);
         }
+        ~Shader() {
+            glDeleteProgram(program);
+        }
+        void use() {
+            glUseProgram(program);
+        }
 
         GLuint& getProgram() {
             return program;
