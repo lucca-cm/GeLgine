@@ -72,3 +72,29 @@ class VertexArray {
                 }
         };
 };
+
+class IndexBuffer {
+    private:
+        GLuint EBO;
+        GLsizei indexCount;
+    public:
+        IndexBuffer(std::vector<GLuint> indices) : indexCount(static_cast<GLsizei>(indices.size())) {
+            glGenBuffers(1, &EBO);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        }
+
+        ~IndexBuffer() {
+            glDeleteBuffers(1, &EBO);
+        }
+
+        void bind() {
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        }
+
+        void unbind() {
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        }
+};
+
