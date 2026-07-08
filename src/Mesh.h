@@ -38,3 +38,37 @@ class VertexBuffer {
                 }
         };
 };
+
+class VertexArray {
+    private:
+        GLuint VAO;
+    public:
+        VertexArray() {
+            glGenVertexArrays(1, &VAO);
+        }
+
+        ~VertexArray() {
+            glDeleteVertexArrays(1, &VAO);
+        }
+
+        void bind() const {
+            glBindVertexArray(VAO);
+        }
+
+        void unbind() const {
+            glBindVertexArray(0);
+        }
+
+        class Binding {
+            private:
+                const VertexArray& vertexArr;
+            public:
+                explicit Binding(const VertexArray& vao) : vertexArr(vao) {
+                    vertexArr.bind(); 
+                }
+
+                ~Binding() {
+                    vertexArr.unbind();
+                }
+        };
+};
