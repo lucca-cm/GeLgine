@@ -97,7 +97,7 @@ class IndexBuffer {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         }
 
-        const int count() const {
+        GLsizei count() const {
             return indexCount;
         }
 };
