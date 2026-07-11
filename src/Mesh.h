@@ -89,12 +89,39 @@ class IndexBuffer {
             glDeleteBuffers(1, &EBO);
         }
 
-        void bind() {
+        void bind() const {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
         }
 
-        void unbind() {
+        void unbind() const {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        }
+
+        const int count() const {
+            return indexCount;
         }
 };
 
+
+class Mesh {
+    private:
+        IndexBuffer EBO;
+        VertexBuffer VBO;
+        VertexArray VAO;
+    public:
+        Mesh(std::vector<GLfloat> vertices, std::vector<GLuint> indices) : EBO(indices), VBO(vertices) {
+            {VertexArray::Binding arrayGuard(VAO);
+                {VertexBuffer::Binding bufferGuard(VBO);
+                    EBO.bind();
+                    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+                    glEnableVertexAttribArray(0);
+                }
+            }  
+        }
+
+        void draw() {
+            {VertexArray::Binding drawGuard(VAO);
+                glDrawElements(GL_TRIANGLES, EBO.count(), GL_UNSIGNED_INT, 0); 
+            }
+        }
+};
