@@ -1,6 +1,6 @@
 #include "windowManager.h"
 
-WindowManager::WindowManager(int width, int heigh) : height(height), width(width) {
+WindowManager::WindowManager(int w, int h) : height(h), width(w) {
     if (!glfwInit()) {
         std::cerr << "Failed to initialize GLFW" << std::endl;
         return;
@@ -11,7 +11,7 @@ WindowManager::WindowManager(int width, int heigh) : height(height), width(width
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-    window = glfwCreateWindow(width, heigh, "OpenGL window", NULL, NULL);
+    window = glfwCreateWindow(width, height, "OpenGL window", NULL, NULL);
 
     if (!window) {
         std::cerr << "Failed to create window\n";
