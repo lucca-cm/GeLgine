@@ -5,9 +5,10 @@
 
 class WindowManager {
     private:
+        int height, width;
         GLFWwindow* window = nullptr;
     public:
-        WindowManager();
+        WindowManager(int height, int width);
         ~WindowManager();
 
         bool shouldExit() const {
