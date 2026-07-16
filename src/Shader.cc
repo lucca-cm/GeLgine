@@ -30,12 +30,21 @@ Shader::~Shader() {
     glDeleteProgram(program);
 }
 
-bool Shader::setUniform(std::string& uniformName, glm::vec4& vector) {
+bool Shader::setUniform(const std::string& uniformName, const glm::vec4& vector) {
     GLint location = glGetUniformLocation(program, uniformName.c_str());
     if (location == -1)
         return false;
     use();
     glUniform4f(location, vector.x, vector.y, vector.z, vector.w);
+    return true;
+}
+
+bool Shader::setUniform(const std::string& uniformName, const glm::mat4& matrix) {
+    GLint location = glGetUniformLocation(program, uniformName.c_str());
+    if (location == -1)
+        return false;
+    use();
+    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
     return true;
 }
 
