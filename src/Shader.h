@@ -1,3 +1,5 @@
+#pragma once
+
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -23,7 +25,7 @@ class Shader {
         bool setUniform(const std::string& uniformName, const glm::vec4& vector) const;
         bool setUniform(const std::string& uniformName, const glm::mat4& matrix) const;
 
-        void use(); 
+        void use() const; 
         GLuint& getProgram() {
             return program;
         }
