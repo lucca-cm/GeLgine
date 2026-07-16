@@ -1,13 +1,14 @@
 #include "Camera.h"
 
-Camera::Camera(glm::vec3 position, glm::quat rotation, float fov, float aspectRatio, float closeZ, float farthestZ)
+Camera::Camera(const glm::vec3& position, const glm::quat& rotation, float fov, float aspectRatio, float closestZ, float farthestZ)
     : position(position), rotation(rotation), fov(fov), aspectRatio(aspectRatio), closestZ(closestZ), farthestZ(farthestZ) {
         outdatedView = true;
         outdatedProjection = true;
         updateCamera();
 }
 
-void Camera::updateCamera() {
+void Camera::updateCamera()
+{
     updateViewMatrix();
     updateProjectionMatrix();
 }
@@ -29,3 +30,22 @@ void Camera::updateProjectionMatrix() {
     outdatedProjection = false;
 }
 
+void Camera::moveBy(const glm::vec3& deltaPos) {
+    position += deltaPos;
+    outdatedView = true;
+}
+
+void Camera::moveTo(const glm::vec3& pos) {
+    position = pos;
+    outdatedView = true;
+}
+
+void Camera::rotateBy(const glm::quat& deltaRot) {
+    rotation = glm::normalize(deltaRot * rotation);
+    outdatedView = true;
+}
+
+void Camera::setRotation(const glm::quat& rotation) {
+    this->rotation = rotation;
+    outdatedView = true;
+}
