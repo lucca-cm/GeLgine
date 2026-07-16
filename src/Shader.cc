@@ -48,6 +48,6 @@ bool Shader::setUniform(const std::string& uniformName, const glm::mat4& matrix)
     return true;
 }
 
-void Shader::use() {
+void Shader::use() const {
     glUseProgram(program);
 }
