@@ -1,6 +1,10 @@
+#pragma once
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
+
+#include "Shader.h"
 
 class Camera {
     private:
@@ -40,5 +44,10 @@ class Camera {
             closestZ = near;
             farthestZ = far;
             outdatedProjection = true;
+        }
+
+        void uploadToShader(const Shader& s) {
+            s.setUniform("view", viewMatrix);
+            s.setUniform("projection", projectionMatrix);
         }
 };
