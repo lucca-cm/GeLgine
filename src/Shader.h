@@ -4,6 +4,7 @@
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 class Shader {
     private:
@@ -19,7 +20,8 @@ class Shader {
         Shader(const std::string& vertexFile, const std::string& fragFile);
         ~Shader();
 
-        bool setUniform(std::string& uniformName, glm::vec4& vector);
+        bool setUniform(const std::string& uniformName, const glm::vec4& vector);
+        bool setUniform(const std::string& uniformName, const glm::mat4& matrix);
 
         void use(); 
         GLuint& getProgram() {
