@@ -20,8 +20,8 @@ class Shader {
         Shader(const std::string& vertexFile, const std::string& fragFile);
         ~Shader();
 
-        bool setUniform(const std::string& uniformName, const glm::vec4& vector);
-        bool setUniform(const std::string& uniformName, const glm::mat4& matrix);
+        bool setUniform(const std::string& uniformName, const glm::vec4& vector) const;
+        bool setUniform(const std::string& uniformName, const glm::mat4& matrix) const;
 
         void use(); 
         GLuint& getProgram() {
