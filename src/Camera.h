@@ -11,9 +11,34 @@ class Camera {
         glm::mat4 projectionMatrix, viewMatrix;
         
     public:
-        Camera(glm::vec3 position, glm::quat rotation, float fov, float aspectRatio, float closeZ, float farthestZ);
+        Camera(const glm::vec3& position, const glm::quat& rotation, float fov, float aspectRatio, float closestZ, float farthestZ);
 
         void updateCamera();
         void updateViewMatrix();
         void updateProjectionMatrix();
+        void forceUpdateCamera() {
+            outdatedView = true;
+            outdatedProjection = true;
+            updateCamera();
+        }
+
+        void moveBy(const glm::vec3& deltaPos);
+        void moveTo(const glm::vec3& pos);
+
+        void rotateBy(const glm::quat& deltaRot);
+        void setRotation(const glm::quat& rotation);
+
+        void setAspectRatio(float aspectRatio) {
+            this->aspectRatio = aspectRatio;
+            outdatedProjection = true;
+        }
+        void setFOV(float fov) {
+            this->fov = fov;
+            outdatedProjection = true;
+        }
+        void setClipZone(float near, float far) {
+            closestZ = near;
+            farthestZ = far;
+            outdatedProjection = true;
+        }
 };
