@@ -27,6 +27,11 @@ class RigidBody {
             torque += t;
         }
 
+        void integrate(float dt) {
+            integrateLinear(dt);
+            integrateAngular(dt);
+        }
+
         void integrateLinear(float dt) {
             velocity += inverseMass * force * dt;
             position += velocity * dt;
