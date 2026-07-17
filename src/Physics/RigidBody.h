@@ -20,12 +20,12 @@ class RigidBody {
         Collider *collider = nullptr;
         
     public:
-        RigidBody(glm::vec3 position, glm::quat rotation, float mass, glm::mat3 inertia,
+        RigidBody(glm::vec3 position, glm::quat rotation, float invMass, glm::mat3 inertia,
                   float rotationalDamping, glm::vec3 velocity = glm::vec3(0.0f),
                   glm::vec3 angularVelocity = glm::vec3(0.0f))
                   : position(position), velocity(velocity), rotationalDamping(rotationalDamping),
                     rotation(rotation), angularVelocity(angularVelocity),
-                    inverseMass(1.0f / mass), inverseInertia(glm::inverse(inertia))
+                    inverseMass(invMass), inverseInertia(glm::inverse(inertia))
         {
             glm::mat3 R = glm::mat3_cast(rotation);
             inverseWorldInertia = R * inverseInertia * glm::transpose(R);
