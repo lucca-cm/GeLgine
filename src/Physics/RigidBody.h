@@ -49,4 +49,24 @@ class RigidBody {
             inverseWorldInertia = R * inverseInertia * glm::transpose(R);
             torque = glm::vec3(0.0f);
         }
+
+        glm::quat getRotation() {
+            return rotation;
+        }
+
+        glm::vec3 getPosition() {
+            return position;
+        }
+
+        glm::vec3 getVelocity() {
+            return velocity;
+        }
+
+        glm::vec3 getAngularVelocity() {
+            return angularVeloity;
+        }
+
+        float getMass() {
+            return 1.0f/inverseMass;
+        }
 };
