@@ -11,7 +11,7 @@ class RigidBody {
 
         const float rotationalDamping;
         glm::quat rotation;
-        glm::vec3 angularVeloity;
+        glm::vec3 angularVelocity;
         glm::vec3 torque;
 
         float inverseMass;
@@ -39,10 +39,10 @@ class RigidBody {
         }
 
         void integrateAngular(float dt) {
-            angularVeloity += inverseWorldInertia * torque * dt;
-            angularVeloity *= powf(rotationalDamping, dt);
+            angularVelocity += inverseWorldInertia * torque * dt;
+            angularVelocity *= powf(rotationalDamping, dt);
 
-            rotation += glm::quat(0.0f, angularVeloity) * rotation * 0.5f * dt;
+            rotation += glm::quat(0.0f, angularVelocity) * rotation * 0.5f * dt;
             rotation = glm::normalize(rotation);
 
             glm::mat3 R = glm::mat3_cast(rotation);
@@ -63,7 +63,7 @@ class RigidBody {
         }
 
         glm::vec3 getAngularVelocity() {
-            return angularVeloity;
+            return angularVelocity;
         }
 
         float getMass() {
