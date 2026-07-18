@@ -1,4 +1,4 @@
-#include "windowManager.h"
+#include "WindowManager.h"
 
 WindowManager::WindowManager(int w, int h) : height(h), width(w) {
     if (!glfwInit()) {
