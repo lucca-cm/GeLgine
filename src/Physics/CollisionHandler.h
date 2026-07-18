@@ -4,7 +4,7 @@
 
 #include "Collider.h"
 
-namespace CollisionHandler {
+namespace Physics::CollisionHandler {
     
     struct Simplex {
         std::array<glm::vec3, 4> points; 
@@ -137,5 +137,17 @@ namespace CollisionHandler {
         }
 
         return true;
+    }
+
+
+    CollisionManifold EPA(const Simplex& s, const Collider& a, const Collider& b) {
+        std::vector<glm::vec3> polytope(s.points.begin(), s.points.end());
+        std::vector<uint8_t> faces = {
+            0, 1, 2,
+            0, 3, 1,
+            0, 2, 3,
+            1, 3, 2
+        };
+
     }
 };
