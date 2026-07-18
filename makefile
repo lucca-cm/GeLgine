@@ -6,11 +6,11 @@ CXXFLAGS := -std=c++17 -Wall -Wextra \
 LDFLAGS := -L/opt/homebrew/lib \
 -lglfw -framework OpenGL
 
-SRC_CPP := $(wildcard src/*.cc)
-SRC_C := $(wildcard src/*.c)
+SRC_CPP := $(shell find src -name '*.cc')
+SRC_C := $(shell find src -name '*.c')
 
-OBJ := $(patsubst src/%.cc,build/%.o,$(SRC_CPP)) \
-       $(patsubst src/%.c,build/%.o,$(SRC_C))
+OBJ := $(SRC_CPP:src/%.cc=build/%.o) \
+       $(SRC_C:src/%.c=build/%.o)
 
 TARGET := app
 
@@ -20,11 +20,11 @@ $(TARGET): $(OBJ)
 	$(CXX) $(OBJ) -o $@ $(LDFLAGS)
 
 build/%.o: src/%.cc
-	@mkdir -p build
+	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 build/%.o: src/%.c
-	@mkdir -p build
+	@mkdir -p $(dir $@)
 	clang -std=c11 -Wall -Wextra -Iinclude -c $< -o $@
 
 clean:
