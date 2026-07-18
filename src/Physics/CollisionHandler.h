@@ -4,11 +4,10 @@
 
 #include "Collider.h"
 
-
 namespace CollisionHandler {
     
     struct Simplex {
-        std::array<glm::vec3, 4> points;
+        std::array<glm::vec3, 4> points; 
         uint8_t size = 0;
 
         Simplex& operator=(std::initializer_list<glm::vec3> list) {
@@ -50,32 +49,93 @@ namespace CollisionHandler {
             
             simplex.push(currentSupport);
 
-            if (simplexInOrigin(simplex, dir)) {
+            if (nextSimplex(simplex, dir)) {
                 return true;
             }
         };
     }
 
-    bool simplexInOrigin(Simplex& s, glm::vec3& dir) {
+    bool nextSimplex(Simplex& s, glm::vec3& dir) {
         
         switch (s.size) {
-            case 2: return lineInOrigin(s, dir);
-            //case 3: return triangleInOrigin(s, dir);
-            //case 4: return tetahedronInOrigin(s, dir);
+            case 2: return lineCase(s, dir);
+            case 3: return triangleCase(s, dir);
+            case 4: return tetrahedronCase(s, dir);
         }
 
         return false;
     }
 
-    bool lineInOrigin(Simplex& s, glm::vec3& dir) {
-        glm::vec3 ab = s[1] - s[0];
+    bool lineCase(Simplex& s, glm::vec3& dir) {
+        glm::vec3 AB = s[1] - s[0];
+        glm::vec3 AO = -s[0];
 
-        if (glm::dot(ab, -s[0]) > 0) {
-            dir = glm::cross(glm::cross(ab, -s[0]), ab);
+        if (glm::dot(AB, AO) > 0) {
+            dir = glm::cross(glm::cross(AB, AO), AB);
         }
         else {
             s = { s[0] };
-            dir = -s[0];
+            dir = AO;
         }
+        
+        return false;
+    }
+
+    bool triangleCase(Simplex& s, glm::vec3& dir) {
+
+        glm::vec3 AB = s[1] - s[0];
+        glm::vec3 AC = s[2] - s[0];
+        glm::vec3 AO = -s[0];
+        glm::vec3 ABC = glm::cross(AB, AC);
+
+        if (glm::dot(glm::cross(ABC, AC), AO) > 0) {
+            if (glm::dot(AC, AO) > 0) {
+                s = {s[0], s[2]};
+                dir = glm::cross(glm::cross(AC, AO), AC);
+            } else {
+                s = {s[0], s[1]};
+                return lineCase(s, dir);
+            }
+        } else {
+            if (glm::dot(glm::cross(AB, ABC), AO) > 0) {
+                s = {s[0], s[1]};
+                return lineCase(s, dir);
+            } else {
+                if (glm::dot(ABC, AO) > 0) {
+                    dir = ABC;
+                } else {
+                    s = {s[0], s[2], s[1]}; 
+                    dir = -ABC;
+                }
+            }
+        }
+        return false;
+    }
+
+    bool tetrahedronCase(Simplex& s, glm::vec3& dir) {
+
+        glm::vec3 AB = s[1] - s[0];
+        glm::vec3 AC = s[2] - s[0];
+        glm::vec3 AD = s[3] - s[0];
+        glm::vec3 AO = -s[0];
+
+        glm::vec3 ABC = glm::cross(AB, AC);
+        glm::vec3 ACD = glm::cross(AC, AD);
+        glm::vec3 ADB = glm::cross(AD, AB);
+
+        if (glm::dot(ABC, AO) > 0) {
+            s = {s[0], s[1], s[2]};
+            return triangleCase(s, dir);
+        }
+        if (glm::dot(ACD, AO) > 0) {
+            s = {s[0], s[2], s[3]};
+            return triangleCase(s, dir);
+        }
+        if (glm::dot(ADB, AO) > 0) {
+            s = {s[0], s[3], s[1]};
+            return triangleCase(s, dir);
+        }
+
+        return true;
     }
 };
