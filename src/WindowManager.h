@@ -8,6 +8,8 @@
 class WindowManager {
     private:
         int height, width;
+        float deltaTime;
+        double lastTimeUpdate, currentTimeUpdate;
         GLFWwindow* window = nullptr;
     public:
         WindowManager(int height, int width);
@@ -29,5 +31,18 @@ class WindowManager {
 
         bool isKeyDown(int key) const {
             return glfwGetKey(window, key) == GLFW_PRESS;
+        }
+
+        void initTime() {
+            lastTimeUpdate = glfwGetTime();
+        }
+        void updateTime() {
+            currentTimeUpdate = glfwGetTime();
+            deltaTime = static_cast<float>(currentTimeUpdate - lastTimeUpdate);
+            lastTimeUpdate = currentTimeUpdate;
+        }
+
+        float getDeltaTime() const {
+            return deltaTime;
         }
 };
