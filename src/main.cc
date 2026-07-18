@@ -42,12 +42,12 @@ std::vector<GLuint> indices = {
 
 int main() {
     WindowManager wm(800, 600);
-    Renderer renderer;
-    Shader basicShader("./shaders/basic.vert", "./shaders/basic.frag");
-    Mesh cube(vertices, indices);
+    Graphics::Renderer renderer;
+    Graphics::Shader basicShader("./shaders/basic.vert", "./shaders/basic.frag");
+    Graphics::Mesh cube(vertices, indices);
     glm::vec3 cameraPosition(0.0f, 0.0f, 3.0f);
     glm::quat cameraRotation(1.0f, 0.0f, 0.0f, 0.0f);
-    Camera camera(cameraPosition, cameraRotation, 60.0f, 800.0f / 600.0f, 0.1f, 100.0f);
+    Graphics::Camera camera(cameraPosition, cameraRotation, 60.0f, 800.0f / 600.0f, 0.1f, 100.0f);
 
 
     glEnable(GL_DEPTH_TEST);
