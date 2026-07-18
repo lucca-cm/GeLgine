@@ -1,9 +1,11 @@
-#include "WindowManager.h"
-#include "Renderer.h"
-#include "Shader.h"
-#include "Mesh.h"
-#include "Camera.h"
+#include <glm/gtc/matrix_transform.hpp>
 
+#include "WindowManager.h"
+#include "./Rendering/Renderer.h"
+#include "./Rendering/Shader.h"
+#include "./Rendering/Mesh.h"
+#include "./Rendering/Camera.h"
+#include "./Physics/RigidBody.h"
 
 std::vector<GLfloat> vertices = {
     // front face
@@ -45,17 +47,33 @@ int main() {
     Graphics::Renderer renderer;
     Graphics::Shader basicShader("./shaders/basic.vert", "./shaders/basic.frag");
     Graphics::Mesh cube(vertices, indices);
+
+    glm::vec3 bodyPos(0.0f);
+    glm::quat rotation(1.0f, 0.0f, 0.0f, 0.0f);
+    glm::mat3 inertia(1.0f);
+    Physics::RigidBody rb(bodyPos, rotation, 1, inertia, 0);
+
     glm::vec3 cameraPosition(0.0f, 0.0f, 3.0f);
     glm::quat cameraRotation(1.0f, 0.0f, 0.0f, 0.0f);
     Graphics::Camera camera(cameraPosition, cameraRotation, 60.0f, 800.0f / 600.0f, 0.1f, 100.0f);
 
+    glm::vec3 gravity(0.0f, -9.81f, 0.0f);
 
     glEnable(GL_DEPTH_TEST);
+    
+    wm.initTime();
     while (!wm.shouldExit()) {
         wm.pollEvents();
 
+        wm.updateTime();
+
+        rb.addForce(gravity);
+        rb.integrate(wm.getDeltaTime());
+
         float time = static_cast<float>(glfwGetTime());
-        glm::mat4 model = glm::rotate(glm::mat4(1.0f), time * glm::radians(45.0f), glm::vec3(1.0f, 1.0f, 0.0f));
+        glm::mat4 model =
+            glm::translate(glm::mat4(1.0f), rb.getPosition()) *
+            glm::mat4_cast(rb.getRotation());
 
         renderer.clear();
 
