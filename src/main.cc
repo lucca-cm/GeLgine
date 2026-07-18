@@ -1,5 +1,5 @@
-#include "windowManager.h"
-#include "renderer.h"
+#include "WindowManager.h"
+#include "Renderer.h"
 #include "Shader.h"
 #include "Mesh.h"
 #include "Camera.h"
