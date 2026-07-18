@@ -3,6 +3,8 @@
 #include <glm/glm.hpp>
 
 namespace Physics {
+    class Collider;
+
     struct CollisionPoint {
         float penetrationDepth;
         glm::vec3 point;
