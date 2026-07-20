@@ -148,6 +148,48 @@ namespace Physics::CollisionHandler {
         return true;
     }
 
+    std::pair<std::vector<FaceNormal>, size_t> getFaceNormals(const std::vector<glm::vec3>& polytope, const std::vector<size_t>& faces) {
+        std::vector<FaceNormal> normals;
+        size_t minTriangle = 0;
+        float  minDistance = FLT_MAX;
+
+        for (size_t i = 0; i < faces.size(); i += 3) {
+            glm::vec3 a = polytope[faces[i]];
+            glm::vec3 b = polytope[faces[i + 1]];
+            glm::vec3 c = polytope[faces[i + 2]];
+
+            FaceNormal face; 
+            face.normal = glm::normalize(glm::cross(b - a, c - a));
+            face.distance = glm::dot(face.normal, a);
+
+            if (face.distance < 0) {
+                face.normal *= -1;
+                face.distance *= -1;
+            }
+
+            normals.emplace_back(face);
+
+            if (face.distance < minDistance) {
+                minTriangle = i / 3;
+                minDistance = face.distance;
+            }
+        }
+
+        return { normals, minTriangle };
+    }
+
+    void AddIfUniqueEdge(std::vector<std::pair<size_t, size_t>>& edges, const std::vector<size_t>& faces, size_t a, size_t b) {
+        auto reverse = std::find(
+            edges.begin(),
+            edges.end(),
+            std::make_pair(faces[b], faces[a])
+        );
+    
+        if (reverse != edges.end())
+            edges.erase(reverse);
+        else 
+            edges.emplace_back(faces[a], faces[b]);
+    }
 
     CollisionManifold EPA(const Simplex& s, const Collider& a, const Collider& b) {
         std::vector<glm::vec3> polytope(s.points.begin(), s.points.end());
