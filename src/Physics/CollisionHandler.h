@@ -10,6 +10,7 @@
 
 namespace Physics::CollisionHandler {
     
+    typedef std::pair<Collider *, Transform> ColliderInstance;
     struct Simplex {
         std::array<glm::vec3, 4> points; 
         uint8_t size = 0;
@@ -38,11 +39,11 @@ namespace Physics::CollisionHandler {
         float distance;
    };
 
-    glm::vec3 support(const Collider& a, const Collider& b, const glm::vec3 r) {
-        return a.getFurthestPoint(r) - b.getFurthestPoint(-r);
+    glm::vec3 support(const ColliderInstance& a, const ColliderInstance& b, const glm::vec3 r) {
+        return a.first->getFurthestPoint(r, a.second) - b.first->getFurthestPoint(-r, b.second);
     }
 
-    bool GJK(const Collider& a, const Collider& b) {
+    bool GJK(const ColliderInstance& a, const ColliderInstance& b) {
         glm::vec3 currentSupport = support(a, b, {1, 0, 0});
 
         Simplex simplex;
@@ -191,7 +192,7 @@ namespace Physics::CollisionHandler {
             edges.emplace_back(faces[a], faces[b]);
     }
 
-    CollisionManifold EPA(const Simplex& s, const Collider& a, const Collider& b) {
+    CollisionManifold EPA(const Simplex& s, const ColliderInstance& a, const ColliderInstance& b) {
         std::vector<glm::vec3> polytope(s.points.begin(), s.points.end());
 
         std::vector<size_t> faces = {
@@ -288,7 +289,7 @@ namespace Physics::CollisionHandler {
 
         result.normal = minNormal;
         point.penetrationDepth = minDistance + EPA_EPSILON;
-        point.point = (a.getFurthestPoint(result.normal) + b.getFurthestPoint(-result.normal))*0.5f;
+        point.point = (a.first->getFurthestPoint(result.normal, a.second) + b.first->getFurthestPoint(-result.normal, b.second))*0.5f;
 
         result.points.push_back(point);
 
