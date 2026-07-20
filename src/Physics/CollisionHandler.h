@@ -1,5 +1,9 @@
 #pragma once
 
+#include <vector>
+#include <utility>
+#include <algorithm>
+
 #include <glm/glm.hpp>
 
 #include "Collider.h"
@@ -27,6 +31,11 @@ namespace Physics::CollisionHandler {
         glm::vec3 operator[](int i) const {
             return points[i];
         }
+   };
+
+   struct FaceNormal {
+        glm::vec3 normal;
+        float distance;
    };
 
     glm::vec3 support(const Collider& a, const Collider& b, const glm::vec3 r) {
