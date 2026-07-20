@@ -193,12 +193,105 @@ namespace Physics::CollisionHandler {
 
     CollisionManifold EPA(const Simplex& s, const Collider& a, const Collider& b) {
         std::vector<glm::vec3> polytope(s.points.begin(), s.points.end());
-        std::vector<uint8_t> faces = {
+
+        std::vector<size_t> faces = {
             0, 1, 2,
             0, 3, 1,
             0, 2, 3,
             1, 3, 2
         };
 
+        auto [normals, minFace] = getFaceNormals(polytope, faces);
+
+        glm::vec3 minNormal;
+        float minDistance = FLT_MAX;
+
+        constexpr float EPA_EPSILON = 0.001f;
+
+        while (minDistance == FLT_MAX) {
+            minNormal = normals[minFace].normal;
+            minDistance = normals[minFace].distance;
+
+            glm::vec3 supportVector = support(a, b, minNormal);
+            float supportDistance = glm::dot(minNormal, supportVector);
+
+            if (supportDistance - minDistance > EPA_EPSILON) {
+                minDistance = FLT_MAX;
+
+                std::vector<std::pair<size_t, size_t>> uniqueEdges;
+
+                for (size_t i = 0; i < normals.size(); ++i) {
+                    if (glm::dot(normals[i].normal, supportVector) > 0.0f) {
+                        size_t f = i * 3;
+
+                        AddIfUniqueEdge(uniqueEdges, faces, f,     f + 1);
+                        AddIfUniqueEdge(uniqueEdges, faces, f + 1, f + 2);
+                        AddIfUniqueEdge(uniqueEdges, faces, f + 2, f);
+
+                        faces[f + 2] = faces.back();
+                        faces.pop_back();
+
+                        faces[f + 1] = faces.back();
+                        faces.pop_back();
+
+                        faces[f] = faces.back();
+                        faces.pop_back();
+
+                        normals[i] = normals.back();
+                        normals.pop_back();
+
+                        --i;
+                    }
+                }
+
+                std::vector<size_t> newFaces;
+                size_t newIndex = polytope.size();
+
+                for (const auto& edge : uniqueEdges) {
+                    newFaces.push_back(edge.first);
+                    newFaces.push_back(edge.second);
+                    newFaces.push_back(newIndex);
+                }
+
+                polytope.push_back(supportVector);
+
+                auto [newNormals, newMinFace] = getFaceNormals(polytope, newFaces);
+
+                float oldMinDistance = FLT_MAX;
+
+                for (size_t i = 0; i < normals.size(); ++i) {
+                    if (normals[i].distance < oldMinDistance) {
+                        oldMinDistance = normals[i].distance;
+                        minFace = i;
+                    }
+                }
+
+                // Compare against newly created faces
+                if (!newNormals.empty() && newNormals[newMinFace].distance < oldMinDistance) {
+                    minFace = newMinFace + normals.size();
+                }
+
+                faces.insert(
+                    faces.end(),
+                    newFaces.begin(),
+                    newFaces.end());
+
+                normals.insert(
+                    normals.end(),
+                    newNormals.begin(),
+                    newNormals.end());
+            }
+        }
+
+        CollisionManifold result;
+        CollisionPoint point;
+
+        result.normal = minNormal;
+        point.penetrationDepth = minDistance + EPA_EPSILON;
+        point.point = (a.getFurthestPoint(result.normal) + b.getFurthestPoint(-result.normal))*0.5f;
+
+        result.points.push_back(point);
+
+        return result;
     }
-};
+}
