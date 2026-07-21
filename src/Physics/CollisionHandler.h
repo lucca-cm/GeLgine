@@ -34,7 +34,12 @@ namespace Physics::CollisionHandler {
         }
    };
 
-   struct FaceNormal {
+    bool nextSimplex(Simplex& s, glm::vec3& dir);
+    bool lineCase(Simplex& s, glm::vec3& dir);
+    bool triangleCase(Simplex& s, glm::vec3& dir);
+    bool tetrahedronCase(Simplex& s, glm::vec3& dir);
+
+    struct FaceNormal {
         glm::vec3 normal;
         float distance;
    };
