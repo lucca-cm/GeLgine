@@ -34,6 +34,9 @@ namespace Physics {
                 inverseWorldInertia = R * inverseInertia * glm::transpose(R);
             }
 
+            void setVelocity(glm::vec3 v) {
+                velocity = v;
+            }
             void setCollider(Collider *c) {
                 collider = c;
             }
@@ -42,6 +45,9 @@ namespace Physics {
             }
             void addTorque(glm::vec3 t) {
                 torque += t;
+            }
+            void addVelocity(glm::vec3 v) {
+                velocity += v;
             }
 
             void integrate(float dt) {
