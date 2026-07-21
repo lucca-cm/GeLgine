@@ -34,6 +34,9 @@ namespace Physics {
                 inverseWorldInertia = R * inverseInertia * glm::transpose(R);
             }
 
+            void setCollider(Collider *c) {
+                collider = c;
+            }
             void addForce(glm::vec3 f) {
                 force += f;
             }
@@ -82,6 +85,17 @@ namespace Physics {
 
             float getMass() {
                 return 1.0f/inverseMass;
+            }
+
+            Collider* getCollider() {
+                return collider;
+            }
+
+            Transform getTransform() {
+                Transform t;
+                t.orientation = rotation;
+                t.posistion = position;
+                return t;
             }
     };
 }
