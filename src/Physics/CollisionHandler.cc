@@ -263,7 +263,7 @@ namespace Physics::CollisionHandler {
 
         CollisionPoint point;
 
-        point.normal = minNormal;
+        point.normal = -minNormal;
         point.penetrationDepth = minDistance + EPA_EPSILON;
         point.point = (a.first->getFurthestPoint(point.normal, a.second) + b.first->getFurthestPoint(-point.normal, b.second))*0.5f;
 
@@ -296,7 +296,7 @@ namespace Physics::CollisionHandler {
                                 rB)
                             );
 
-        float restitution = 0.5f; //TODO
+        float restitution = 1.0f; //TODO
 
         return  (-(1 + restitution) * glm::dot(relativeVelocity, collisionPoint.normal) / denominator);
     }
