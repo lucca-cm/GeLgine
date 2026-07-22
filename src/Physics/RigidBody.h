@@ -92,6 +92,18 @@ namespace Physics {
             float getMass() {
                 return 1.0f/inverseMass;
             }
+            
+            float getInverseMass() {
+                return inverseMass;
+            }
+
+            glm::mat3 getInverseInertia() {
+                return inverseInertia;
+            }
+            
+            glm::mat3 getInverseWorldInertia() {
+                return inverseWorldInertia;
+            }
 
             Collider* getCollider() {
                 return collider;
