@@ -4,6 +4,8 @@
 #include <glm/gtc/quaternion.hpp>
 
 namespace Physics {
+    struct Transform;
+
     class Collider {
         public:
             virtual glm::vec3 getFurthestPoint(const glm::vec3& d, const Transform& transform) const = 0;
