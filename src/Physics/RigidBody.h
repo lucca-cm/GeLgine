@@ -50,6 +50,10 @@ namespace Physics {
                 velocity += v;
             }
 
+            void addAngularVelocity(glm::vec3 omega) {
+                angularVelocity += omega;
+            }
+
             void integrate(float dt) {
                 integrateLinear(dt);
                 integrateAngular(dt);
