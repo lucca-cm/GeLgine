@@ -3,6 +3,7 @@
 #include <vector>
 #include <utility>
 #include <algorithm>
+#include <iostream>
 
 #include <glm/glm.hpp>
 
@@ -34,7 +35,7 @@ namespace Physics::CollisionHandler {
 
     glm::vec3 support(const ColliderInstance& a, const ColliderInstance& b, const glm::vec3 r);
 
-    bool GJK(const ColliderInstance& a, const ColliderInstance& b);
+    std::pair<bool, Simplex> GJK(const ColliderInstance& a, const ColliderInstance& b);
 
     bool nextSimplex(Simplex& s, glm::vec3& dir);
 
@@ -45,7 +46,7 @@ namespace Physics::CollisionHandler {
     std::pair<std::vector<FaceNormal>, size_t> getFaceNormals(const std::vector<glm::vec3>& polytope, const std::vector<size_t>& faces);
     void AddIfUniqueEdge(std::vector<std::pair<size_t, size_t>>& edges, const std::vector<size_t>& faces, size_t a, size_t b);
 
-    CollisionManifold EPA(const Simplex& s, const ColliderInstance& a, const ColliderInstance& b);
+    CollisionPoint EPA(const Simplex& s, const ColliderInstance& a, const ColliderInstance& b);
 
-    float solveImpulse(const CollisionPoint& collisionPoint, const glm::vec3& normal, RigidBody& a, RigidBody& b);
+    float solveImpulse(const CollisionPoint& collisionPoint, RigidBody& a, RigidBody& b);
 }
