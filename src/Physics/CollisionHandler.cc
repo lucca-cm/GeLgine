@@ -169,7 +169,7 @@ namespace Physics::CollisionHandler {
             edges.emplace_back(faces[a], faces[b]);
     }
 
-    CollisionManifold EPA(const Simplex& s, const ColliderInstance& a, const ColliderInstance& b) {
+    CollisionPoint EPA(const Simplex& s, const ColliderInstance& a, const ColliderInstance& b) {
         std::vector<glm::vec3> polytope(s.points.begin(), s.points.end());
 
         std::vector<size_t> faces = {
@@ -261,43 +261,43 @@ namespace Physics::CollisionHandler {
             }
         }
 
-        CollisionManifold result;
         CollisionPoint point;
 
-        result.normal = minNormal;
+        point.normal = minNormal;
         point.penetrationDepth = minDistance + EPA_EPSILON;
-        point.point = (a.first->getFurthestPoint(result.normal, a.second) + b.first->getFurthestPoint(-result.normal, b.second))*0.5f;
+        point.point = (a.first->getFurthestPoint(point.normal, a.second) + b.first->getFurthestPoint(-point.normal, b.second))*0.5f;
 
-        result.points.push_back(point);
-
-        return result;
+        return point;
     }
 
-    float solveImpulse(const CollisionPoint &collisionPoint, const glm::vec3 &normal, RigidBody &a, RigidBody &b) {
+    float solveImpulse(const CollisionPoint &collisionPoint, RigidBody &a, RigidBody &b) {
         glm::vec3 rA = collisionPoint.point - a.getPosition(); 
         glm::vec3 rB = collisionPoint.point - b.getPosition();
 
         glm::vec3 relativeVelocity = (a.getVelocity() + glm::cross(a.getAngularVelocity(), rA)) - 
                                      (b.getVelocity() + glm::cross(b.getAngularVelocity(), rB)); 
 
+        if (a.getInverseMass() == 0 || b.getInverseMass() == 0)
+            return -1.0f;
+        
         float denominator = a.getInverseMass() + b.getInverseMass();
 
         denominator += glm::dot(   
-                            normal,
+                            collisionPoint.normal,
                             glm::cross(
-                                a.getInverseWorldInertia() * glm::cross(rA, normal),
+                                a.getInverseWorldInertia() * glm::cross(rA, collisionPoint.normal),
                                 rA)
                             );
         
         denominator += glm::dot(   
-                            normal,
+                            collisionPoint.normal,
                             glm::cross(
-                                b.getInverseWorldInertia() * glm::cross(rB, normal),
+                                b.getInverseWorldInertia() * glm::cross(rB, collisionPoint.normal),
                                 rB)
                             );
 
-        float restitution = 1.0f; //TODO
+        float restitution = 0.5f; //TODO
 
-        return  (-(1 + restitution) * glm::dot(relativeVelocity, normal) / denominator);
+        return  (-(1 + restitution) * glm::dot(relativeVelocity, collisionPoint.normal) / denominator);
     }
 }
