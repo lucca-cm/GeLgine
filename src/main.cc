@@ -8,6 +8,7 @@
 #include "./Physics/RigidBody.h"
 #include "./Physics/BoxCollider.h"
 #include "./Physics/CollisionHandler.h"
+#include "./Physics/PhysicsManager.h"
 
 std::vector<GLfloat> vertices = {
     // front face
@@ -49,6 +50,7 @@ int main() {
     Graphics::Renderer renderer;
     Graphics::Shader basicShader("./shaders/basic.vert", "./shaders/basic.frag");
     Graphics::Mesh cube(vertices, indices);
+    Physics::PhysicsManager pm;
 
     Physics::BoxCollider boxCollider(glm::vec3(0.5f, 0.5f, 0.5f));
 
@@ -62,6 +64,10 @@ int main() {
     rigidb.setCollider(&boxCollider);
     rb.setCollider(&boxCollider);
 
+    auto aId = pm.addBody(rigidb);
+    auto bId = pm.addBody(rb);
+    pm.addCollider(&boxCollider);
+
     glm::vec3 cameraPosition(0.0f, 0.0f, 3.0f);
     glm::quat cameraRotation(1.0f, 0.0f, 0.0f, 0.0f);
     Graphics::Camera camera(cameraPosition, cameraRotation, 60.0f, 800.0f / 600.0f, 0.1f, 100.0f);
@@ -71,6 +77,10 @@ int main() {
     glEnable(GL_DEPTH_TEST);
     
     wm.initTime();
+    
+    auto& a = pm.getRigidBody(aId);
+    auto& b = pm.getRigidBody(bId);
+
     while (!wm.shouldExit()) {
         wm.pollEvents();
 
@@ -93,14 +103,14 @@ int main() {
 
 
 
-        rb.addForce(force);
-        rb.integrate(wm.getDeltaTime());
-
-        bool colliding = Physics::CollisionHandler::GJK({rigidb.getCollider(), rigidb.getTransform()},
-                                                        {rb.getCollider(), rb.getTransform()});
+        a.addForce(force);
+        pm.step(wm.getDeltaTime());
+        
+        bool colliding = Physics::CollisionHandler::GJK({a.getCollider(), a.getTransform()},
+                                                        {b.getCollider(), b.getTransform()}).first;
         glm::mat4 model =
-            glm::translate(glm::mat4(1.0f), rb.getPosition()) *
-            glm::mat4_cast(rb.getRotation());
+            glm::translate(glm::mat4(1.0f), a.getPosition()) *
+            glm::mat4_cast(a.getRotation());
 
         renderer.clear();
 
@@ -114,8 +124,8 @@ int main() {
         cube.draw();
         
         model =
-            glm::translate(glm::mat4(1.0f), rigidb.getPosition()) *
-            glm::mat4_cast(rigidb.getRotation());
+            glm::translate(glm::mat4(1.0f), b.getPosition()) *
+            glm::mat4_cast(b.getRotation());
         basicShader.setUniform("model", model);
         basicShader.setUniform(
             "fragColor",
