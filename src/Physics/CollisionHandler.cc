@@ -23,7 +23,7 @@ namespace Physics::CollisionHandler {
         return a.first->getFurthestPoint(r, a.second) - b.first->getFurthestPoint(-r, b.second);
     }
 
-    bool GJK(const ColliderInstance& a, const ColliderInstance& b) {
+    std::pair<bool, Simplex> GJK(const ColliderInstance& a, const ColliderInstance& b) {
         glm::vec3 currentSupport = support(a, b, {1, 0, 0});
 
         Simplex simplex;
@@ -35,12 +35,12 @@ namespace Physics::CollisionHandler {
             currentSupport = support(a, b, dir);
 
             if (glm::dot(currentSupport, dir) <= 0)
-                return false;
+                return {false, simplex};
             
             simplex.push(currentSupport);
 
             if (nextSimplex(simplex, dir)) {
-                return true;
+                return {true, simplex};
             }
         };
     }
