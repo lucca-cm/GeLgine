@@ -272,4 +272,32 @@ namespace Physics::CollisionHandler {
 
         return result;
     }
+
+    float solveImpulse(const CollisionPoint &collisionPoint, const glm::vec3 &normal, RigidBody &a, RigidBody &b) {
+        glm::vec3 rA = collisionPoint.point - a.getPosition(); 
+        glm::vec3 rB = collisionPoint.point - b.getPosition();
+
+        glm::vec3 relativeVelocity = (a.getVelocity() + glm::cross(a.getAngularVelocity(), rA)) - 
+                                     (b.getVelocity() + glm::cross(b.getAngularVelocity(), rB)); 
+
+        float denominator = a.getInverseMass() + b.getInverseMass();
+
+        denominator += glm::dot(   
+                            normal,
+                            glm::cross(
+                                a.getInverseWorldInertia() * glm::cross(rA, normal),
+                                rA)
+                            );
+        
+        denominator += glm::dot(   
+                            normal,
+                            glm::cross(
+                                b.getInverseWorldInertia() * glm::cross(rB, normal),
+                                rB)
+                            );
+
+        float restitution = 1.0f; //TODO
+
+        return  (-(1 + restitution) * glm::dot(relativeVelocity, normal) / denominator);
+    }
 }
