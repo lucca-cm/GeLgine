@@ -15,7 +15,15 @@ namespace Physics {
     }
     AABB BoxCollider::computeAABB(const Transform &transform) const {
         AABB ab;
-        ab.halfExtent = glm::abs(glm::mat3_cast(transform.orientation)) * this->halfSize;
+        auto rotMatrix = glm::mat3_cast(transform.orientation);
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                rotMatrix[i][j] = abs(rotMatrix[i][j]);
+            }
+        }
+
+        ab.halfExtent = rotMatrix * this->halfSize;
         ab.center = transform.posistion;
         return ab;
     }
