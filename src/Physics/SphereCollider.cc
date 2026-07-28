@@ -8,4 +8,11 @@ namespace Physics {
             return transform.posistion;
         return transform.posistion + glm::normalize(d) * radius;
     }
+
+    AABB SphereCollider::computeAABB(const Transform &transform) const {
+        AABB ab;
+        ab.center = transform.posistion;
+        ab.halfExtent = glm::vec3(radius);
+        return ab;
+    }
 }

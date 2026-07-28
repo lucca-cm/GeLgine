@@ -13,4 +13,10 @@ namespace Physics {
         
         return transform.posistion + transform.orientation * p;
     }
+    AABB BoxCollider::computeAABB(const Transform &transform) const {
+        AABB ab;
+        ab.halfExtent = glm::abs(glm::mat3_cast(transform.orientation)) * this->halfSize;
+        ab.center = transform.posistion;
+        return ab;
+    }
 }
