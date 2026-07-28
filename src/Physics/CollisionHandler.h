@@ -49,4 +49,6 @@ namespace Physics::CollisionHandler {
     CollisionPoint EPA(const Simplex& s, const ColliderInstance& a, const ColliderInstance& b);
 
     float solveImpulse(const CollisionPoint& collisionPoint, RigidBody& a, RigidBody& b);
+
+    bool AABBCollision(const AABB& a, const AABB& b);
 }

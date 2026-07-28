@@ -300,4 +300,13 @@ namespace Physics::CollisionHandler {
 
         return  (-(1 + restitution) * glm::dot(relativeVelocity, collisionPoint.normal) / denominator);
     }
+
+    bool AABBCollision(const AABB &a, const AABB &b) {
+        auto d = a.center - b.center;
+        return (
+            abs(d.x) <= (a.halfExtent.x + b.halfExtent.x) &&
+            abs(d.y) <= (a.halfExtent.y + b.halfExtent.y) &&
+            abs(d.z) <= (a.halfExtent.z + b.halfExtent.z)
+        );
+    }
 }
