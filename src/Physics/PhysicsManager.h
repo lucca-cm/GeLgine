@@ -35,16 +35,15 @@ namespace Physics {
             void step(float dt) {
                 for (size_t i = 0; i < bodies.size(); ++i) {
                     for (size_t j = i + 1; j < bodies.size(); ++j) {
-                            auto& a = bodies[i];
-                            auto& b = bodies[j];
-                            
-                            auto v = CollisionHandler::checkCollision(a, b);
+                        auto& a = bodies[i];
+                        auto& b = bodies[j];
+                        
+                        auto v = CollisionHandler::checkCollision(a, b);
 
-                            collisions.insert(collisions.end(), v.begin(), v.end());
-                        }
+                        collisions.insert(collisions.end(), v.begin(), v.end());
                     }
                 }
-
+                
                 for (int i = 0; i < velocityIterations; i++) {
                     for (int j = 0; j < collisions.size(); j++) {
                         auto& c = collisions[j];
