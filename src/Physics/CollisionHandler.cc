@@ -309,4 +309,24 @@ namespace Physics::CollisionHandler {
             abs(d.z) <= (a.halfExtent.z + b.halfExtent.z)
         );
     }
+
+    std::vector<CollisionPoint> checkCollision(RigidBody &a, RigidBody &b) {
+        std::vector<CollisionPoint> points;
+        if (!AABBCollision(a.getBodyAABB(), b.getBodyAABB()))
+            return points;
+
+
+        auto c = CollisionHandler::GJK({a.getCollider(), a.getTransform()},
+                                        {b.getCollider(), b.getTransform()});
+        if (!c.first)
+            return points; 
+
+        auto temp = CollisionHandler::EPA(c.second,
+                            {a.getCollider(), a.getTransform()},
+                            {b.getCollider(), b.getTransform()});
+        temp.first = &a;
+        temp.second = &b;
+        points.push_back(temp);
+        return points;
+    }
 }
