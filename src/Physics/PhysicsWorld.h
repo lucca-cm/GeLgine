@@ -7,7 +7,7 @@
 #include "CollisionHandler.h"
 
 namespace Physics {
-    class PhysicsManager {
+    class PhysicsWorld {
         private:
             std::vector<RigidBody> bodies;
             std::vector<Collider *> colliders;

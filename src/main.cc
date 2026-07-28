@@ -8,7 +8,7 @@
 #include "./Physics/RigidBody.h"
 #include "./Physics/BoxCollider.h"
 #include "./Physics/CollisionHandler.h"
-#include "./Physics/PhysicsManager.h"
+#include "./Physics/PhysicsWorld.h"
 
 std::vector<GLfloat> vertices = {
     // front face
@@ -50,7 +50,7 @@ int main() {
     Graphics::Renderer renderer;
     Graphics::Shader basicShader("./shaders/basic.vert", "./shaders/basic.frag");
     Graphics::Mesh cube(vertices, indices);
-    Physics::PhysicsManager pm;
+    Physics::PhysicsWorld pm;
 
     Physics::BoxCollider boxCollider(glm::vec3(0.5f, 0.5f, 0.5f));
 
