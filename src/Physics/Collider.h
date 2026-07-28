@@ -5,9 +5,11 @@
 
 namespace Physics {
     struct Transform;
+    class Collider;
     class RigidBody;
     struct AABB;
-
+    typedef std::pair<Collider *, Transform> ColliderInstance;
+ 
     class Collider {
         public:
             virtual glm::vec3 support(const glm::vec3& d, const Transform& transform) const = 0;
