@@ -93,27 +93,35 @@ namespace Physics {
                 return angularVelocity;
             }
 
-            float getMass() {
+            float getMass() const {
                 return 1.0f/inverseMass;
             }
             
-            float getInverseMass() {
+            float getInverseMass() const {
                 return inverseMass;
             }
 
-            glm::mat3 getInverseInertia() {
+            glm::mat3 getInverseInertia() const {
                 return inverseInertia;
             }
             
-            glm::mat3 getInverseWorldInertia() {
+            glm::mat3 getInverseWorldInertia() const {
                 return inverseWorldInertia;
             }
 
-            Collider* getCollider() {
+            Collider* getCollider() const {
                 return collider;
             }
 
-            Transform getTransform() {
+            ColliderInstance getColliderInstance() const {
+                return {this->getCollider(), this->getTransform()};
+            }
+
+            AABB getBodyAABB() const {
+                return collider->computeAABB(this->getTransform());
+            }
+
+            Transform getTransform() const {
                 Transform t;
                 t.orientation = rotation;
                 t.posistion = position;
