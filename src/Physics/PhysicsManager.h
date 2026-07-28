@@ -35,19 +35,12 @@ namespace Physics {
             void step(float dt) {
                 for (size_t i = 0; i < bodies.size(); ++i) {
                     for (size_t j = i + 1; j < bodies.size(); ++j) {
-                        auto& a = bodies[i];
-                        auto& b = bodies[j];
+                            auto& a = bodies[i];
+                            auto& b = bodies[j];
+                            
+                            auto v = CollisionHandler::checkCollision(a, b);
 
-                        auto c = CollisionHandler::GJK({a.getCollider(), a.getTransform()},
-                                                        {b.getCollider(), b.getTransform()});
-                        if (c.first) {
-                            auto temp = CollisionHandler::EPA(c.second,
-                                            {a.getCollider(), a.getTransform()},
-                                            {b.getCollider(), b.getTransform()});
-                            temp.first = &a;
-                            temp.second = &b;
-                            collisions.push_back(temp);
-                            impulses.push_back(0);
+                            collisions.insert(collisions.end(), v.begin(), v.end());
                         }
                     }
                 }
