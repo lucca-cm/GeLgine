@@ -10,6 +10,6 @@ namespace Physics {
             float radius;
         public:
             SphereCollider(float radius);
-            glm::vec3 getFurthestPoint(const glm::vec3& d, const Transform& transform) const override;
+            glm::vec3 support(const glm::vec3& d, const Transform& transform) const override;
     };
 }

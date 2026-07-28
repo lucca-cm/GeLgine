@@ -9,7 +9,7 @@ namespace Physics {
 
     class Collider {
         public:
-            virtual glm::vec3 getFurthestPoint(const glm::vec3& d, const Transform& transform) const = 0;
+            virtual glm::vec3 support(const glm::vec3& d, const Transform& transform) const = 0;
     };
     struct CollisionPoint {
         RigidBody *first, *second;

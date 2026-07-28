@@ -20,7 +20,7 @@ namespace Physics::CollisionHandler {
     }
 
     glm::vec3 support(const ColliderInstance& a, const ColliderInstance& b, const glm::vec3 r) {
-        return a.first->getFurthestPoint(r, a.second) - b.first->getFurthestPoint(-r, b.second);
+        return a.first->support(r, a.second) - b.first->support(-r, b.second);
     }
 
     std::pair<bool, Simplex> GJK(const ColliderInstance& a, const ColliderInstance& b) {
@@ -265,7 +265,7 @@ namespace Physics::CollisionHandler {
 
         point.normal = -minNormal;
         point.penetrationDepth = minDistance + EPA_EPSILON;
-        point.point = (a.first->getFurthestPoint(point.normal, a.second) + b.first->getFurthestPoint(-point.normal, b.second))*0.5f;
+        point.point = (a.first->support(point.normal, a.second) + b.first->support(-point.normal, b.second))*0.5f;
 
         return point;
     }

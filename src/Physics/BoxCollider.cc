@@ -3,7 +3,7 @@
 namespace Physics {
     BoxCollider::BoxCollider(glm::vec3 halfSize) :halfSize(halfSize) {}
 
-    glm::vec3 BoxCollider::getFurthestPoint(const glm::vec3& d, const Transform& transform) const {
+    glm::vec3 BoxCollider::support(const glm::vec3& d, const Transform& transform) const {
         glm::vec3 dir = glm::conjugate(transform.orientation) * d;
         glm::vec3 p = glm::vec3(
             dir.x >= 0 ? halfSize.x : -halfSize.x,
