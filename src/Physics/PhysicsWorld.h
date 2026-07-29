@@ -12,6 +12,7 @@ namespace Physics {
             std::vector<RigidBody> bodies;
             std::vector<Collider *> colliders;
             std::vector<CollisionPoint> collisions;
+            std::vector<AABB> aabbCache;
             std::vector<float> impulses;
 
             size_t velocityIterations = 5;
@@ -32,20 +33,31 @@ namespace Physics {
                 return bodies[id];
             }
 
+            void cacheCurrentAABB() {
+                for (auto& rb : bodies) {
+                    aabbCache.push_back(rb.getBodyAABB());
+                }
+            }
+
             void step(float dt) {
+                cacheCurrentAABB();
                 for (size_t i = 0; i < bodies.size(); ++i) {
                     for (size_t j = i + 1; j < bodies.size(); ++j) {
                         auto& a = bodies[i];
                         auto& b = bodies[j];
                         
-                        auto v = CollisionHandler::checkCollision(a, b);
-
-                        collisions.insert(collisions.end(), v.begin(), v.end());
+                        if (CollisionHandler::checkBroadPhase(aabbCache[i], aabbCache[j])) {
+                            auto v = CollisionHandler::checkCollision(a, b);
+                            collisions.insert(collisions.end(), v.begin(), v.end());
+                            for (auto&& _ : v) {
+                                impulses.push_back(0.0f);
+                            }
+                        }
                     }
                 }
                 
-                for (int i = 0; i < velocityIterations; i++) {
-                    for (int j = 0; j < collisions.size(); j++) {
+                for (size_t i = 0; i < velocityIterations; i++) {
+                    for (size_t j = 0; j < collisions.size(); j++) {
                         auto& c = collisions[j];
                         
                         RigidBody& a = *c.first;
@@ -73,6 +85,7 @@ namespace Physics {
                 
                 collisions.clear();
                 impulses.clear();
+                aabbCache.clear();
             }
     };
 }
