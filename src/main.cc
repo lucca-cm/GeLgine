@@ -86,6 +86,8 @@ int main() {
 
         wm.updateTime();
 
+        std::cout << "FPS: " << 1/wm.getDeltaTime() << std::endl;
+
         glm::vec3 force(0.0f);
         
         if (wm.isKeyDown(GLFW_KEY_RIGHT)) {
@@ -108,25 +110,20 @@ int main() {
         
         bool colliding = Physics::CollisionHandler::GJK({a.getCollider(), a.getTransform()},
                                                         {b.getCollider(), b.getTransform()}).first;
-        glm::mat4 model =
-            glm::translate(glm::mat4(1.0f), a.getPosition()) *
-            glm::mat4_cast(a.getRotation());
-
+        cube.transformModelMatrix(a.getPosition(), a.getRotation());
         renderer.clear();
 
         basicShader.use();
         camera.uploadToShader(basicShader);
-        basicShader.setUniform("model", model);
+        basicShader.setUniform("model", cube.getModelMatrix());
         basicShader.setUniform(
             "fragColor",
             glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)
         );
         cube.draw();
         
-        model =
-            glm::translate(glm::mat4(1.0f), b.getPosition()) *
-            glm::mat4_cast(b.getRotation());
-        basicShader.setUniform("model", model);
+        cube.transformModelMatrix(b.getPosition(), b.getRotation());
+        basicShader.setUniform("model", cube.getModelMatrix());
         basicShader.setUniform(
             "fragColor",
             (colliding ? glm::vec4(0.0f, 1.0f, 0.0f, 1.0f) : glm::vec4(0.0f, 0.0f, 1.0f, 1.0f))
