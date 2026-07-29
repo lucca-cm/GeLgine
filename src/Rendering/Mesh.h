@@ -3,6 +3,9 @@
 #include <vector>
 
 #include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 namespace Graphics {
     class VertexBuffer {
@@ -73,8 +76,12 @@ namespace Graphics {
             IndexBuffer EBO;
             VertexBuffer VBO;
             VertexArray VAO;
+            glm::mat4 modelMatrix;
         public:
             Mesh(std::vector<GLfloat> vertices, std::vector<GLuint> indices);
             void draw();
+            void setModelMatrix(const glm::mat4& matrix);
+            glm::mat4 getModelMatrix();
+            void transformModelMatrix(const glm::vec3& position = glm::vec3(0.0f), const glm::quat& rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f));
     };
 }
