@@ -50,7 +50,7 @@ namespace Physics::CollisionHandler {
 
     float solveImpulse(const CollisionPoint& collisionPoint, RigidBody& a, RigidBody& b);
 
-    bool AABBCollision(const AABB& a, const AABB& b);
+    bool checkBroadPhase(const AABB& a, const AABB& b);
 
     std::vector<CollisionPoint> checkCollision(RigidBody& a, RigidBody& b);
 }

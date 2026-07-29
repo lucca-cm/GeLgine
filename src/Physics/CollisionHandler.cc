@@ -301,7 +301,7 @@ namespace Physics::CollisionHandler {
         return  (-(1 + restitution) * glm::dot(relativeVelocity, collisionPoint.normal) / denominator);
     }
 
-    bool AABBCollision(const AABB &a, const AABB &b) {
+    bool checkBroadPhase(const AABB &a, const AABB &b) {
         auto d = a.center - b.center;
         return (
             abs(d.x) <= (a.halfExtent.x + b.halfExtent.x) &&
@@ -312,9 +312,6 @@ namespace Physics::CollisionHandler {
 
     std::vector<CollisionPoint> checkCollision(RigidBody &a, RigidBody &b) {
         std::vector<CollisionPoint> points;
-        if (!AABBCollision(a.getBodyAABB(), b.getBodyAABB()))
-            return points;
-
 
         auto c = CollisionHandler::GJK({a.getCollider(), a.getTransform()},
                                         {b.getCollider(), b.getTransform()});
