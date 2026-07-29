@@ -55,7 +55,7 @@ namespace Graphics {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
-    Mesh::Mesh(std::vector<GLfloat> vertices, std::vector<GLuint> indices) : EBO(indices), VBO(vertices) {
+    Mesh::Mesh(std::vector<GLfloat> vertices, std::vector<GLuint> indices) : EBO(indices), VBO(vertices), modelMatrix(glm::mat4(1.0f)) {
         {VertexArray::Binding arrayGuard(VAO);
             {VertexBuffer::Binding bufferGuard(VBO);
                 EBO.bind();
@@ -66,10 +66,21 @@ namespace Graphics {
     }
 
 
-    void Mesh::draw()
-    {
+    void Mesh::draw() {
         {VertexArray::Binding drawGuard(VAO);
             glDrawElements(GL_TRIANGLES, EBO.getCount(), GL_UNSIGNED_INT, 0); 
         }
+    }
+
+    void Mesh::setModelMatrix(const glm::mat4& matrix) {
+        modelMatrix = matrix;
+    }
+
+    glm::mat4 Mesh::getModelMatrix() {
+        return modelMatrix;
+    }
+
+    void Mesh::transformModelMatrix(const glm::vec3 &position, const glm::quat &rotation) {
+        modelMatrix = glm::translate(glm::mat4(1.0f), position) * glm::mat4_cast(rotation);
     }
 }
