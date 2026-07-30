@@ -9,50 +9,23 @@
 #include "./Physics/BoxCollider.h"
 #include "./Physics/CollisionHandler.h"
 #include "./Physics/PhysicsWorld.h"
-
-std::vector<GLfloat> vertices = {
-    // front face
-    -0.5f, -0.5f,  0.5f,
-     0.5f, -0.5f,  0.5f,
-     0.5f,  0.5f,  0.5f,
-    -0.5f,  0.5f,  0.5f,
-
-    // back face
-    -0.5f, -0.5f, -0.5f,
-     0.5f, -0.5f, -0.5f,
-     0.5f,  0.5f, -0.5f,
-    -0.5f,  0.5f, -0.5f,
-};
-
-std::vector<GLuint> indices = {
-    // front
-    0, 1, 2,
-    2, 3, 0,
-    // right
-    1, 5, 6,
-    6, 2, 1,
-    // back
-    5, 4, 7,
-    7, 6, 5,
-    // left
-    4, 0, 3,
-    3, 7, 4,
-    // top
-    3, 2, 6,
-    6, 7, 3,
-    // bottom
-    4, 5, 1,
-    1, 0, 4,
-};
+#include "./Rendering/Geometry.h"
+#include "./Physics/SphereCollider.h"
 
 int main() {
     WindowManager wm(800, 600);
     Graphics::Renderer renderer;
     Graphics::Shader basicShader("./shaders/basic.vert", "./shaders/basic.frag");
-    Graphics::Mesh cube(vertices, indices);
+    auto boxData = Graphics::Geometry::createBox({0.5f, 0.5f, 0.5f});
+    Graphics::Mesh cube(boxData.first, boxData.second);
+
+    auto sphereData = Graphics::Geometry::createSphere(0.5f, 16, 32);
+    Graphics::Mesh sphere(sphereData.first, sphereData.second);
+
     Physics::PhysicsWorld pm;
 
     Physics::BoxCollider boxCollider(glm::vec3(0.5f, 0.5f, 0.5f));
+    Physics::SphereCollider sphereCollider(0.5f);
 
     glm::vec3 bodyPos(0.0f);
     glm::quat rotation(1.0f, 0.0f, 0.0f, 0.0f);
@@ -62,11 +35,12 @@ int main() {
     glm::vec3 bPos(2.0f, 0.0f, 0.0f);
     Physics::RigidBody rigidb(bPos, rotation, 1, inertia, 1);
     rigidb.setCollider(&boxCollider);
-    rb.setCollider(&boxCollider);
+    rb.setCollider(&sphereCollider);
 
     auto aId = pm.addBody(rigidb);
     auto bId = pm.addBody(rb);
     pm.addCollider(&boxCollider);
+    pm.addCollider(&sphereCollider);
 
     glm::vec3 cameraPosition(0.0f, 0.0f, 3.0f);
     glm::quat cameraRotation(1.0f, 0.0f, 0.0f, 0.0f);
@@ -122,13 +96,13 @@ int main() {
         );
         cube.draw();
         
-        cube.transformModelMatrix(b.getPosition(), b.getRotation());
-        basicShader.setUniform("model", cube.getModelMatrix());
+        sphere.transformModelMatrix(b.getPosition(), b.getRotation());
+        basicShader.setUniform("model", sphere.getModelMatrix());
         basicShader.setUniform(
             "fragColor",
             (colliding ? glm::vec4(0.0f, 1.0f, 0.0f, 1.0f) : glm::vec4(0.0f, 0.0f, 1.0f, 1.0f))
         );
-        cube.draw();
+        sphere.draw();
         wm.swapBuffers();
     }
     return 0;
