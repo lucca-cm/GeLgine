@@ -47,8 +47,6 @@ namespace Physics {
                 RigidBody& a = *c.first;
                 RigidBody& b = *c.second;
 
-                glm::vec3 rA = c.point - a.getPosition(); 
-                glm::vec3 rB = c.point - b.getPosition();
 
                 float J = CollisionHandler::solveImpulse(c, a, b);
 
@@ -56,10 +54,8 @@ namespace Physics {
                 impulses[j] = std::max(0.0f, impulses[j] + J);
                 float deltaJ = impulses[j] - oldJ;
 
-                a.addVelocity((deltaJ * a.getInverseMass() * c.normal));
-                a.addAngularVelocity((a.getInverseWorldInertia() * glm::cross(rA, deltaJ*c.normal)));
-                b.addVelocity(-(deltaJ * b.getInverseMass() * c.normal));
-                b.addAngularVelocity(-(b.getInverseWorldInertia() * glm::cross(rB, deltaJ*c.normal)));
+                a.applyImpulse(c, deltaJ);
+                b.applyImpulse(c, -deltaJ);
             }
         }
 

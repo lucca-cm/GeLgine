@@ -127,5 +127,10 @@ namespace Physics {
                 t.posistion = position;
                 return t;
             }
+            
+            void applyImpulse(const CollisionPoint& p, const float J) {
+                this->addVelocity((J * inverseMass * p.normal));
+                this->addAngularVelocity((inverseWorldInertia * glm::cross(p.point - position, J*p.normal)));
+            }
     };
 }
