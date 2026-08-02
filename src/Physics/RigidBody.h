@@ -117,6 +117,10 @@ namespace Physics {
                 return {this->getCollider(), this->getTransform()};
             }
 
+            ColliderType getColliderType() const {
+                return collider->getType();
+            }
+
             AABB getBodyAABB() const {
                 return collider->computeAABB(this->getTransform());
             }
