@@ -22,12 +22,16 @@ namespace Physics {
     }
 
     void Physics::PhysicsWorld::cacheCurrentAABB() {
+        aabbCache.clear();
+        aabbCache.reserve(bodies.size());
         for (auto& rb : bodies) {
-            aabbCache.push_back(rb.getBodyAABB());
+            aabbCache.emplace_back(rb.getBodyAABB());
         }
     }
 
     void Physics::PhysicsWorld::step(float dt) {
+        collisions.clear();
+        impulses.clear();
         cacheCurrentAABB();
         for (size_t i = 0; i < bodies.size(); ++i) {
             for (size_t j = i + 1; j < bodies.size(); ++j) {
@@ -37,20 +41,20 @@ namespace Physics {
                 if (a.getColliderType() == ColliderType::Plane && b.getColliderType() == ColliderType::Plane)
                     continue;
                 if (a.getColliderType() == ColliderType::Plane) {
-                    auto v = CollisionHandler::planeCollision(static_cast<PlaneCollider *>(a.getCollider()), b);
-                    if (v.has_value()) {
-                        auto f = *v;
-                        f.second = &a;
-                        collisions.push_back(f);
+                    auto v = CollisionHandler::planeCollision(static_cast<PlaneCollider *>(a.getCollider()), b, a);
+                    if (v.empty())
+                        continue;
+                    collisions.insert(collisions.end(), v.begin(), v.end());
+                    for (auto&& _ : v) {
                         impulses.push_back(0.0f);
                     }
                 } 
                 else if (b.getColliderType() == ColliderType::Plane) {
-                    auto v = CollisionHandler::planeCollision(static_cast<PlaneCollider *>(b.getCollider()), a);
-                    if (v.has_value()) {
-                        auto f = *v;
-                        f.second = &b;
-                        collisions.push_back(f);
+                    auto v = CollisionHandler::planeCollision(static_cast<PlaneCollider *>(b.getCollider()), a, b);
+                    if (v.empty())
+                        continue;
+                    collisions.insert(collisions.end(), v.begin(), v.end());
+                    for (auto&& _ : v) {
                         impulses.push_back(0.0f);
                     }
                 }
@@ -89,6 +93,5 @@ namespace Physics {
         
         collisions.clear();
         impulses.clear();
-        aabbCache.clear();
     }
 }
