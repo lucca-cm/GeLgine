@@ -327,18 +327,42 @@ namespace Physics::CollisionHandler {
         return points;
     }
 
-    std::optional<CollisionPoint> planeCollision(PlaneCollider *a, RigidBody &b) {
-        glm::vec3 p = b.getCollider()->support(-a->getNormal(), b.getTransform());
-        float delta = glm::dot(a->getNormal(), p) - a->getDistance();
-        if (delta > 0)
-            return {};
+    std::vector<CollisionPoint> planeCollision(PlaneCollider *a, RigidBody &b, RigidBody& rbA) {
+        if (b.getColliderType() == ColliderType::Box) {
+            std::vector<CollisionPoint> points;
+            glm::vec3 n = a->getNormal();
+            auto box = static_cast<BoxCollider *>(b.getCollider());
 
-        CollisionPoint f;
-        f.first = &b;
-        f.normal = a->getNormal();
-        f.penetrationDepth = -delta;
-        f.point = p - delta * a->getNormal();
+            auto face = box->getIncidentFace(-n, b.getTransform());
 
-        return f;
+            for (auto& p : face) {
+                float delta = glm::dot(n, p) - a->getDistance();
+                if (delta > 0) continue;
+
+                CollisionPoint f;
+                f.first = &b;
+                f.second = &rbA;
+                f.normal = n;
+                f.penetrationDepth = -delta;
+                f.point = p - delta * n;
+                points.push_back(f);
+            }
+            return points;
+        }
+        else {
+            glm::vec3 p = b.getCollider()->support(-a->getNormal(), b.getTransform());
+            float delta = glm::dot(a->getNormal(), p) - a->getDistance();
+            if (delta > 0)
+                return {};
+
+            CollisionPoint f;
+            f.first = &b;
+            f.second = &rbA;
+            f.normal = a->getNormal();
+            f.penetrationDepth = -delta;
+            f.point = p - delta * a->getNormal();
+
+            return std::vector<CollisionPoint>(1, f);
+        }
     }
 }
