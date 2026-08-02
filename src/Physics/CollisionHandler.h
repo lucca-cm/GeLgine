@@ -4,11 +4,13 @@
 #include <utility>
 #include <algorithm>
 #include <iostream>
+#include <optional>
 
 #include <glm/glm.hpp>
 
 #include "Collider.h"
 #include "RigidBody.h"
+#include "PlaneCollider.h"
 
 namespace Physics::CollisionHandler {
     
@@ -53,4 +55,6 @@ namespace Physics::CollisionHandler {
     bool checkBroadPhase(const AABB& a, const AABB& b);
 
     std::vector<CollisionPoint> checkCollision(RigidBody& a, RigidBody& b);
+
+    std::optional<CollisionPoint> planeCollision(PlaneCollider *a, RigidBody& b);
 }
