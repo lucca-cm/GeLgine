@@ -10,6 +10,12 @@ namespace Physics {
     struct AABB;
     typedef std::pair<Collider *, Transform> ColliderInstance;
  
+    enum class ColliderType : uint8_t {
+        Box,
+        Sphere,
+        Plane
+    };
+
     class Collider {
         public:
             virtual glm::vec3 support(const glm::vec3& d, const Transform& transform) const = 0;
