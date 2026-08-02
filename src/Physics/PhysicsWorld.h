@@ -16,6 +16,10 @@ namespace Physics {
             std::vector<float> impulses;
 
             size_t velocityIterations = 5;
+            const float beta = 0.2f;
+            const float slop = 0.005f;
+
+            float computeBias(float penetrationDepth, float dt);
         public:
             size_t addBody(const RigidBody& b);
             size_t addCollider(Collider *c);
