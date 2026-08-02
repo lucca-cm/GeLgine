@@ -277,7 +277,7 @@ namespace Physics::CollisionHandler {
         glm::vec3 relativeVelocity = (a.getVelocity() + glm::cross(a.getAngularVelocity(), rA)) - 
                                      (b.getVelocity() + glm::cross(b.getAngularVelocity(), rB)); 
 
-        if (a.getInverseMass() == 0 || b.getInverseMass() == 0)
+        if (a.getInverseMass() == 0 && b.getInverseMass() == 0)
             return -1.0f;
         
         float denominator = a.getInverseMass() + b.getInverseMass();
@@ -325,5 +325,20 @@ namespace Physics::CollisionHandler {
         temp.second = &b;
         points.push_back(temp);
         return points;
+    }
+
+    std::optional<CollisionPoint> planeCollision(PlaneCollider *a, RigidBody &b) {
+        glm::vec3 p = b.getCollider()->support(-a->getNormal(), b.getTransform());
+        float delta = glm::dot(a->getNormal(), p) - a->getDistance();
+        if (delta > 0)
+            return {};
+
+        CollisionPoint f;
+        f.first = &b;
+        f.normal = a->getNormal();
+        f.penetrationDepth = -delta;
+        f.point = p - delta * a->getNormal();
+
+        return f;
     }
 }
