@@ -50,7 +50,7 @@ namespace Physics::CollisionHandler {
 
     CollisionPoint EPA(const Simplex& s, const ColliderInstance& a, const ColliderInstance& b);
 
-    float solveImpulse(const CollisionPoint& collisionPoint, RigidBody& a, RigidBody& b);
+    float solveImpulse(const CollisionPoint& collisionPoint, float bias, RigidBody& a, RigidBody& b);
 
     bool checkBroadPhase(const AABB& a, const AABB& b);
 

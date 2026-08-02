@@ -270,7 +270,7 @@ namespace Physics::CollisionHandler {
         return point;
     }
 
-    float solveImpulse(const CollisionPoint &collisionPoint, RigidBody &a, RigidBody &b) {
+    float solveImpulse(const CollisionPoint &collisionPoint, float bias, RigidBody &a, RigidBody &b) {
         glm::vec3 rA = collisionPoint.point - a.getPosition(); 
         glm::vec3 rB = collisionPoint.point - b.getPosition();
 
@@ -298,7 +298,7 @@ namespace Physics::CollisionHandler {
 
         float restitution = 1.0f; //TODO
 
-        return  (-(1 + restitution) * glm::dot(relativeVelocity, collisionPoint.normal) / denominator);
+        return  ((-(1 + restitution) * glm::dot(relativeVelocity, collisionPoint.normal) + bias)/ denominator);
     }
 
     bool checkBroadPhase(const AABB &a, const AABB &b) {

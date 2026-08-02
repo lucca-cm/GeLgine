@@ -1,6 +1,10 @@
 #include "PhysicsWorld.h"
 
 namespace Physics {
+    float PhysicsWorld::computeBias(float penetrationDepth, float dt) {
+        return  (beta / dt) * std::max(0.0f, penetrationDepth - slop);
+    }
+
     size_t Physics::PhysicsWorld::addBody(const RigidBody& b) {
         bodies.push_back(b);
 
@@ -68,7 +72,7 @@ namespace Physics {
                 RigidBody& b = *c.second;
 
 
-                float J = CollisionHandler::solveImpulse(c, a, b);
+                float J = CollisionHandler::solveImpulse(c, computeBias(c.penetrationDepth, dt), a, b);
 
                 float oldJ = impulses[j];
                 impulses[j] = std::max(0.0f, impulses[j] + J);
