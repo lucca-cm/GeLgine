@@ -20,6 +20,7 @@ namespace Physics {
         public:
             virtual glm::vec3 support(const glm::vec3& d, const Transform& transform) const = 0;
             virtual AABB computeAABB(const Transform& transform) const = 0;
+            virtual ColliderType getType() const = 0;
     };
 
     struct CollisionPoint {
