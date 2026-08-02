@@ -30,7 +30,27 @@ namespace Physics {
                 auto& a = bodies[i];
                 auto& b = bodies[j];
                 
-                if (CollisionHandler::checkBroadPhase(aabbCache[i], aabbCache[j])) {
+                if (a.getColliderType() == ColliderType::Plane && b.getColliderType() == ColliderType::Plane)
+                    continue;
+                if (a.getColliderType() == ColliderType::Plane) {
+                    auto v = CollisionHandler::planeCollision(static_cast<PlaneCollider *>(a.getCollider()), b);
+                    if (v.has_value()) {
+                        auto f = *v;
+                        f.second = &a;
+                        collisions.push_back(f);
+                        impulses.push_back(0.0f);
+                    }
+                } 
+                else if (b.getColliderType() == ColliderType::Plane) {
+                    auto v = CollisionHandler::planeCollision(static_cast<PlaneCollider *>(b.getCollider()), a);
+                    if (v.has_value()) {
+                        auto f = *v;
+                        f.second = &b;
+                        collisions.push_back(f);
+                        impulses.push_back(0.0f);
+                    }
+                }
+                else if (CollisionHandler::checkBroadPhase(aabbCache[i], aabbCache[j])) {
                     auto v = CollisionHandler::checkCollision(a, b);
                     collisions.insert(collisions.end(), v.begin(), v.end());
                     for (auto&& _ : v) {
