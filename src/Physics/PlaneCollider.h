@@ -14,8 +14,16 @@ namespace Physics {
             glm::vec3 support(const glm::vec3& d, const Transform& transform) const override;
             AABB computeAABB(const Transform& transform) const override;
 
-            ColliderType getType() const {
+            ColliderType getType() const override {
                 return ColliderType::Plane;
+            }
+
+            glm::vec3 getNormal() const {
+                return normal;
+            }
+
+            float getDistance() const {
+                return distance;
             }
     };
 }
