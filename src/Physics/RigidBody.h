@@ -54,6 +54,9 @@ namespace Physics {
                 angularVelocity += omega;
             }
 
+            void addPosition(glm::vec3 deltaR) {
+                position += deltaR;
+            }
             void integrate(float dt) {
                 integrateLinear(dt);
                 integrateAngular(dt);
