@@ -7,6 +7,10 @@
 #include "CollisionHandler.h"
 
 namespace Physics {
+    extern const size_t velocityIterations;
+    extern const float beta;
+    extern const float slop;
+
     class PhysicsWorld {
         private:
             std::vector<RigidBody> bodies;
@@ -14,10 +18,6 @@ namespace Physics {
             std::vector<CollisionPoint> collisions;
             std::vector<AABB> aabbCache;
             std::vector<float> impulses;
-
-            size_t velocityIterations = 5;
-            const float beta = 0.2f;
-            const float slop = 0.005f;
 
             float computeBias(float penetrationDepth, float dt);
         public:
