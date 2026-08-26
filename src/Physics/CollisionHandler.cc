@@ -365,4 +365,13 @@ namespace Physics::CollisionHandler {
             return std::vector<CollisionPoint>(1, f);
         }
     }
+
+    void correctPosition(RigidBody *a, RigidBody *b, glm::vec3 normal, float penetrationDepth) {
+        float correction = std::max(penetrationDepth - Physics::slop, 0.0f);
+        correction /= (a->getInverseMass() + b->getInverseMass());
+        glm::vec3 correctionVector = correction*normal;
+
+         a->addPosition(correctionVector);
+         b->addPosition(-correctionVector);
+    }
 }

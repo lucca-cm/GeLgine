@@ -12,6 +12,7 @@
 #include "RigidBody.h"
 #include "PlaneCollider.h"
 #include "BoxCollider.h"
+#include "PhysicsWorld.h"
 
 namespace Physics::CollisionHandler {
     
@@ -58,4 +59,6 @@ namespace Physics::CollisionHandler {
     std::vector<CollisionPoint> checkCollision(RigidBody& a, RigidBody& b);
 
     std::vector<CollisionPoint> planeCollision(PlaneCollider *a, RigidBody& b, RigidBody& rbA);
+
+    void correctPosition(RigidBody *a, RigidBody *b, glm::vec3 normal, float penetrationDepth);
 }
