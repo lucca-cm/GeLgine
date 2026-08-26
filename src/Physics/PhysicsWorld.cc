@@ -1,6 +1,9 @@
 #include "PhysicsWorld.h"
 
 namespace Physics {
+    const size_t velocityIterations = 5;
+    const float slop = 0.005f;
+    const float beta = 0.2f;
     float PhysicsWorld::computeBias(float penetrationDepth, float dt) {
         return  (beta / dt) * std::max(0.0f, penetrationDepth - slop);
     }
