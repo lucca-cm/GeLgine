@@ -296,7 +296,7 @@ namespace Physics::CollisionHandler {
                                 rB)
                             );
 
-        float restitution = 1.0f; //TODO
+        float restitution = glm::min(a.getRestitution(), b.getRestitution());
 
         return  ((-(1 + restitution) * glm::dot(relativeVelocity, collisionPoint.normal) + bias)/ denominator);
     }
