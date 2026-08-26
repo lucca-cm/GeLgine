@@ -22,6 +22,7 @@ namespace Physics {
             glm::mat3 inverseWorldInertia;
             Collider *collider = nullptr;
             
+            float restitution = 0.5f;
         public:
             RigidBody(glm::vec3 position, glm::quat rotation, float invMass, glm::mat3 inertia,
                     float rotationalDamping, glm::vec3 velocity = glm::vec3(0.0f),
@@ -80,6 +81,9 @@ namespace Physics {
                 torque = glm::vec3(0.0f);
             }
 
+            float getRestitution() {
+                return restitution;
+            }
             glm::quat getRotation() {
                 return rotation;
             }
