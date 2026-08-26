@@ -1,16 +1,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "WindowManager.h"
-#include "./Rendering/Renderer.h"
-#include "./Rendering/Shader.h"
-#include "./Rendering/Mesh.h"
-#include "./Rendering/Camera.h"
-#include "./Physics/RigidBody.h"
-#include "./Physics/BoxCollider.h"
-#include "./Physics/CollisionHandler.h"
-#include "./Physics/PhysicsWorld.h"
-#include "./Rendering/Geometry.h"
-#include "./Physics/SphereCollider.h"
+#include "Rendering/Rendering.h"
+#include "Physics/Physics.h"
 
 int main() {
     WindowManager wm(800, 600);
