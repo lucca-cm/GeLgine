@@ -15,6 +15,12 @@ class WindowManager {
         WindowManager(int height, int width);
         ~WindowManager();
 
+        void setWindowSize(int w, int h)  {
+            width = w;
+            height = h;
+            glfwSetWindowSize(window, width, height);
+        }
+
         bool shouldExit() const {
             if (!window) 
                 return true;
