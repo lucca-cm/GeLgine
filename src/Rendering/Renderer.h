@@ -1,11 +1,18 @@
 #pragma once
 
+#include <vector>
+#include <utility>
+
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
 namespace Graphics {
+    template<typename T>
+    using Uniform = std::pair<const char *, T>;
+    
     class Renderer {
         private:
+            Shader *currentShader = nullptr;
             bool isWireframeEnabled = false;
         public:
             void clear(glm::vec4 color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)) {
@@ -21,6 +28,19 @@ namespace Graphics {
                     glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
                     isWireframeEnabled = false;
                 }
+            }
+
+            void begin(Camera& camera, Shader *shader) {
+                currentShader = shader;
+                currentShader->use();
+                camera.uploadToShader(currentShader);
+            }
+
+            template<typename... Uniforms>
+            void draw(Mesh& mesh, Uniforms&&... uniforms) {
+                (currentShader->setUniform(uniforms.first, uniforms.second), ...);
+
+                mesh.draw();
             }
     };
 }
