@@ -1,10 +1,8 @@
 #include "GeLgine.h"
 
 void GeLgine::Engine::run(Game& game) {
-    WindowManager wm(game.width, game.height);
-    Graphics::Renderer renderer;
-    Physics::PhysicsWorld world;
-
+    wm.setWindowSize(game.width, game.height);
+    game.onStart();
     wm.initTime();
     float DtAccumulator = 0.0f;
     while (!wm.shouldExit()) {
@@ -12,13 +10,17 @@ void GeLgine::Engine::run(Game& game) {
 
         wm.updateTime();
         DtAccumulator += wm.getDeltaTime();
+        
+        game.onUpdate(wm.getDeltaTime());
+
         while (DtAccumulator >= game.fixedDt) {
-            game.onUpdate(wm.getDeltaTime());
-            world.step(wm.getDeltaTime());
+            game.onFixedUpdate();
+            world.step(game.fixedDt);
             DtAccumulator -= game.fixedDt;
         }
 
         renderer.clear();
+        game.onRender();
 
         wm.swapBuffers();
     }
