@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Game.h"
-#include "Physics/Physics.h"
+#include "Physics/PhysicsEngine.h"
 #include "Rendering/Rendering.h"
 #include "WindowManager.h"
 
