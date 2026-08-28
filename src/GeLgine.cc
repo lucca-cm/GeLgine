@@ -3,7 +3,9 @@
 void GeLgine::Engine::run(Game& game) {
     wm.setWindowSize(game.width, game.height);
     game.onStart();
+    glEnable(GL_DEPTH_TEST);
     wm.initTime();
+
     float DtAccumulator = 0.0f;
     while (!wm.shouldExit()) {
         wm.pollEvents();
