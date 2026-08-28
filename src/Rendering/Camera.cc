@@ -1,12 +1,33 @@
 #include "Camera.h"
 
 namespace Graphics {
-    Camera::Camera(const glm::vec3& position, const glm::quat& rotation, float fov, float aspectRatio, float closestZ, float farthestZ)
+    Camera::Camera(glm::vec3 position, glm::quat& rotation, float fov, float aspectRatio, float closestZ, float farthestZ)
         : position(position), rotation(rotation), fov(fov), aspectRatio(aspectRatio), closestZ(closestZ), farthestZ(farthestZ) {
             outdatedView = true;
             outdatedProjection = true;
             updateCamera();
     }
+
+    Camera::Camera(float fov, float aspectRatio, float closestZ, float farthestZ) 
+        : fov(fov), aspectRatio(aspectRatio), closestZ(closestZ), farthestZ(farthestZ) {
+            position = glm::vec3(0.0f);
+            rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+            outdatedProjection = true;
+            outdatedView = true;
+            updateCamera();
+    }
+
+    Camera::Camera(float fov, float aspectRatio) 
+        : fov(fov), aspectRatio(aspectRatio) {
+            position = glm::vec3(0.0f);
+            rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+            closestZ = 0.1f;
+            farthestZ = 100.0f;
+            outdatedProjection = true;
+            outdatedView = true;
+            updateCamera();
+    }
+
 
     void Camera::updateCamera()
     {

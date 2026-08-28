@@ -16,7 +16,9 @@ namespace Graphics {
             glm::mat4 projectionMatrix, viewMatrix;
             
         public:
-            Camera(const glm::vec3& position, const glm::quat& rotation, float fov, float aspectRatio, float closestZ, float farthestZ);
+            Camera(glm::vec3 position, glm::quat& rotation, float fov, float aspectRatio, float closestZ, float farthestZ);
+            Camera(float fov, float aspectRatio, float closestZ, float farthestZ);
+            Camera(float fov, float aspectRatio);
 
             void updateCamera();
             void updateViewMatrix();
