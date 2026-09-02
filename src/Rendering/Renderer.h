@@ -6,6 +6,10 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
+#include "Shader.h"
+#include "Camera.h"
+#include "Mesh.h"
+
 namespace Graphics {
     template<typename T>
     using Uniform = std::pair<const char *, T>;
@@ -33,7 +37,7 @@ namespace Graphics {
             void begin(Camera& camera, Shader *shader) {
                 currentShader = shader;
                 currentShader->use();
-                camera.uploadToShader(currentShader);
+                camera.uploadToShader(*currentShader);
             }
 
             template<typename... Uniforms>
