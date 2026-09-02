@@ -4,12 +4,17 @@
 #include "Physics/PhysicsEngine.h"
 #include "Rendering/Rendering.h"
 #include "WindowManager.h"
+#include "Engine/Context.h"
 
 namespace GeLgine {
     struct GeLgineContext {
-        Physics::PhysicsWorld& physics;
-        Graphics::Renderer& renderer;
-        WindowManager& window;
+        PhysicsContext physics;
+        InputContext input;
+        GraphicsContext graphics;
+        WindowContext window;
+        
+        GeLgineContext(Physics::PhysicsWorld *world, Graphics::Renderer *ren, WindowManager *window)
+        : physics(world), input(window), window(window), graphics(ren) {}
     };
     class Engine {
         private:
@@ -20,12 +25,7 @@ namespace GeLgine {
         public:
             Engine() : wm(0, 0) {}
             GeLgineContext getContext() {
-                auto c = GeLgineContext{
-                    .physics = world,
-                    .renderer = renderer,
-                    .window = wm,
-                };
-
+                GeLgineContext c(&world, &renderer, &wm);
                 return c;
             }
             void run(Game& game);
