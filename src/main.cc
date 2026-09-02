@@ -2,7 +2,7 @@
 
 #include "WindowManager.h"
 #include "Rendering/Rendering.h"
-#include "Physics/Physics.h"
+#include "Physics/PhysicsEngine.h"
 
 int main() {
     WindowManager wm(800, 600);
