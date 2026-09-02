@@ -14,7 +14,7 @@ namespace GeLgine {
         WindowContext window;
         
         GeLgineContext(Physics::PhysicsWorld *world, Graphics::Renderer *ren, WindowManager *window)
-        : physics(world), input(window), window(window), graphics(ren) {}
+        : physics(world), input(window), graphics(ren), window(window) {}
     };
     class Engine {
         private:
