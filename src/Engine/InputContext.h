@@ -21,10 +21,11 @@ namespace GeLgine {
         Down = GLFW_KEY_DOWN
     };
 
-    class Input {
+    class InputContext {
         private:
             WindowManager *window;
         public: 
+            InputContext(WindowManager *window) : window(window) {}
             bool isKeyDown(Key key) {
                 return window->isKeyDown(static_cast<int>(key));
             }
