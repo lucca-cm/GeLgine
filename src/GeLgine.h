@@ -21,12 +21,13 @@ namespace GeLgine {
             Physics::PhysicsWorld world;
             Graphics::Renderer renderer;
             WindowManager wm;
-            
+            GeLgineContext context;
+
         public:
-            Engine() : wm(0, 0) {}
-            GeLgineContext getContext() {
-                GeLgineContext c(&world, &renderer, &wm);
-                return c;
+            Engine() : wm(800, 800), context(&world, &renderer, &wm) {}
+
+            GeLgineContext *getContext() {
+                return &context;
             }
             void run(Game& game);
     };   
