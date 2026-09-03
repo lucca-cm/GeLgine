@@ -24,6 +24,11 @@ namespace Physics {
             
             float restitution = 0.5f;
         public:
+            RigidBody()
+            : position(glm::vec3(0.0f, 0.0f, 0.0f)), velocity(glm::vec3(0.0f, 0.0f, 0.0f)), rotationalDamping(0.05f),
+              rotation(glm::quat(1.0f, 0.0f, 0.0f, 0.0f)), angularVelocity(glm::vec3(0.0f,0.0f,0.0f)), inverseMass(1.0f),
+              inverseInertia(glm::mat3(1.0f)) {}
+            
             RigidBody(glm::vec3 position, glm::quat rotation, float invMass, glm::mat3 inertia,
                     float rotationalDamping, glm::vec3 velocity = glm::vec3(0.0f),
                     glm::vec3 angularVelocity = glm::vec3(0.0f))
@@ -35,6 +40,9 @@ namespace Physics {
                 inverseWorldInertia = R * inverseInertia * glm::transpose(R);
             }
 
+            void setPosition(glm::vec3 r) {
+                position = r;
+            }
             void setVelocity(glm::vec3 v) {
                 velocity = v;
             }
