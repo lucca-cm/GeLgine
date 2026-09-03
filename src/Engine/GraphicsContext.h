@@ -20,5 +20,9 @@ namespace GeLgine {
             void draw(Graphics::Mesh& mesh, Uniforms&&... uniforms) {
                 ren->draw(mesh, std::forward<Uniforms>(uniforms)...);
             }
+            
+            Graphics::Geometry::MeshData createBox(glm::vec3 halfExtents) {
+                return Graphics::Geometry::createBox(halfExtents);
+            }
     };
 }
