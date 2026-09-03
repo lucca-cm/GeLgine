@@ -1,6 +1,6 @@
-#include "GeLgine.h"
+#include "Gelgine.h"
 
-void GeLgine::Engine::run(Game& game) {
+void Gelgine::Engine::run(Game& game) {
     wm.setWindowSize(game.width, game.height);
     game.onStart();
     glEnable(GL_DEPTH_TEST);
