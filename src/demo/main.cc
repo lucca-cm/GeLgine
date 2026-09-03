@@ -1,9 +1,9 @@
-#include "../GeLgine.h"
+#include "../Gelgine.h"
 
 #include "MyGame.h"
 
 int main() {
-    GeLgine::Engine engine;
+    Gelgine::Engine engine;
 
     MyGame game;
     game.setContext(engine.getContext());
