@@ -19,6 +19,7 @@ class WindowManager {
             width = w;
             height = h;
             glfwSetWindowSize(window, width, height);
+            glViewport(0, 0, width, height);
         }
 
         bool shouldExit() const {
