@@ -2,7 +2,7 @@
 
 #include "../Game.h"
 
-class MyGame : public GeLgine::Game {
+class MyGame : public Gelgine::Game {
     private:
         Physics::RigidBody *a;
         Graphics::Mesh *boxMesh;
@@ -36,30 +36,30 @@ class MyGame : public GeLgine::Game {
             boxMesh->transformModelMatrix(a->getPosition(), a->getRotation());
             glm::vec3 force(0.0f);
             
-            if (ctx->input.isKeyDown(GeLgine::Key::Right)) {
+            if (ctx->input.isKeyDown(Gelgine::Key::Right)) {
                 force.x += 1.0f;
             }
-            if (ctx->input.isKeyDown(GeLgine::Key::Left)) {
+            if (ctx->input.isKeyDown(Gelgine::Key::Left)) {
                 force.x -= 1.0f;
             }
-            if (ctx->input.isKeyDown(GeLgine::Key::Up)) {
+            if (ctx->input.isKeyDown(Gelgine::Key::Up)) {
                 force.z += 1.0f;
             }
-            if (ctx->input.isKeyDown(GeLgine::Key::Down)) {
+            if (ctx->input.isKeyDown(Gelgine::Key::Down)) {
                 force.z -= 1.0f;
             }
 
             glm::vec3 delta(0.0f);
-            if (ctx->input.isKeyDown(GeLgine::Key::D)) {
+            if (ctx->input.isKeyDown(Gelgine::Key::D)) {
                 delta.x += 1.0f;
             }
-            if (ctx->input.isKeyDown(GeLgine::Key::A)) {
+            if (ctx->input.isKeyDown(Gelgine::Key::A)) {
                 delta.x -= 1.0f;
             }
-            if (ctx->input.isKeyDown(GeLgine::Key::W)) {
+            if (ctx->input.isKeyDown(Gelgine::Key::W)) {
                 delta.z += 1.0f;
             }
-            if (ctx->input.isKeyDown(GeLgine::Key::S)) {
+            if (ctx->input.isKeyDown(Gelgine::Key::S)) {
                 delta.z -= 1.0f;
             }
 

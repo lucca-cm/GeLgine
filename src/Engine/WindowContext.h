@@ -2,7 +2,7 @@
 
 #include "../WindowManager.h"
 
-namespace GeLgine {
+namespace Gelgine {
     class WindowContext {
         private:
             WindowManager *window;

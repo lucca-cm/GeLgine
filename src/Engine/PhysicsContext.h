@@ -2,7 +2,7 @@
 
 #include "../Physics/PhysicsEngine.h" 
 
-namespace GeLgine {
+namespace Gelgine {
     class PhysicsContext {
         private:
             Physics::PhysicsWorld *world;

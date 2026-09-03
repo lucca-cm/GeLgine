@@ -2,7 +2,7 @@
 
 #include "../Rendering/Rendering.h"
 
-namespace GeLgine {
+namespace Gelgine {
     class GraphicsContext {
         private:
             Graphics::Renderer *ren;
