@@ -1,9 +1,16 @@
 #pragma once
 
+#include <vector>
+#include <memory>
+
+#include "Ensemble.h"
+
 namespace Gelgine {
     struct GelgineContext;
     class Game {
         protected:
+            Physics::PhysicsWorld world;
+            std::vector<std::unique_ptr<Ensemble>> ensembles; 
             GelgineContext* ctx;
         public:
             const int width = 800, height = 600;
@@ -20,5 +27,10 @@ namespace Gelgine {
             virtual void onFixedUpdate() = 0;
             virtual void onRender() = 0;
 
+            void draw() {
+                for (auto& e : ensembles) {
+                    e->draw();
+                }
+            }
     };
 }
