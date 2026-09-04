@@ -27,5 +27,10 @@ namespace Gelgine {
                 addBody(plane);
                 addCollider(planeCollider);
             }
+
+            size_t createBody() {
+                auto *rb = new Physics::RigidBody();
+                return world->addBody(*rb);
+            }
     };
 }
