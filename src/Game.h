@@ -9,7 +9,6 @@ namespace Gelgine {
     struct GelgineContext;
     class Game {
         protected:
-            Physics::PhysicsWorld world;
             std::vector<std::unique_ptr<Ensemble>> ensembles; 
             GelgineContext* ctx;
         public:
