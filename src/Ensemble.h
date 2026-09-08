@@ -7,15 +7,16 @@
 
 namespace Gelgine {
     class Ensemble {
+        private:
+            bool active;
         protected:
             std::vector<std::unique_ptr<GameObject>> gameObjects;
-            bool activated = false; 
         public:
-            virtual void ~Scene() = default;
+            ~Ensemble() = default;
 
-            void draw() {
+            void draw(Graphics::Renderer &ren) {
                 for (auto& obj : gameObjects) {
-                    obj->draw();
+                    obj->draw(ren);
                 }
             }
 
@@ -23,15 +24,15 @@ namespace Gelgine {
             T &createObject(Args&&... args);
 
             void activate() {
-                activated = true;
+                active = true;
             }
 
             void deactivate() {
-                activated = false;
+                active = false;
             }
 
             bool isActive() {
-                return activated;
+                return active;
             }
             
             virtual void onUpdate() = 0;
