@@ -6,6 +6,9 @@ namespace Gelgine {
     void GameObject::addComponent(Args &&...args) {
         auto component = std::make_unique<T>(this, std::forward<Args>(args)...);
 
+        if (std::is_base_of_v<GraphicsComponent, T>) {
+            renderablePieces.push_back(component.get());
+        }
         components[typeid(T)] = std::move(component);
     }
 
