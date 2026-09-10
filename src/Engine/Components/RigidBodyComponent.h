@@ -8,19 +8,19 @@ namespace Gelgine {
     class RigidBodyComponent : public Component {
         private:
             size_t rigidBodyID;
-            Physics::RigidBody *rb;
 
-            void updateBodyPointer() {
-                rb = &(owner->getContext()->physics.getRigidBody(rigidBodyID));
-            }
         public:
             RigidBodyComponent(GameObject *owner) : Component(owner) {
                 rigidBodyID = owner->getContext()->physics.createBody();
-                updateBodyPointer();
             }
             
+            Physics::RigidBody &getRigidBody() {
+                return owner->getContext()->physics.getRigidBody(rigidBodyID);
+            }
+
             void setCollider(Physics::Collider *collider) {
-                rb->setCollider(collider);
+                getRigidBody().setCollider(collider);
+                owner->getContext()->physics.addCollider(collider);
             }
     };
 }
