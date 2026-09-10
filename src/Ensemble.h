@@ -8,6 +8,7 @@
 namespace Gelgine {
     class Ensemble {
         private:
+            GelgineContext *ctx;
             bool active;
         protected:
             std::vector<std::unique_ptr<GameObject>> gameObjects;
@@ -33,6 +34,10 @@ namespace Gelgine {
 
             bool isActive() {
                 return active;
+            }
+
+            void setContext(GelgineContext *c) {
+                ctx = c;
             }
             
             virtual void onUpdate() = 0;
