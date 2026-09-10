@@ -18,5 +18,9 @@ namespace Gelgine {
                 rigidBodyID = owner->getContext()->physics.createBody();
                 updateBodyPointer();
             }
+            
+            void setCollider(Physics::Collider *collider) {
+                rb->setCollider(collider);
+            }
     };
 }
