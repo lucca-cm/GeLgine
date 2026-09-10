@@ -1,6 +1,7 @@
 #pragma once
 
-#include <vector>
+#include <unordered_map>
+#include <string>
 #include <memory>
 
 #include "Ensemble.h"
@@ -9,7 +10,8 @@ namespace Gelgine {
     struct GelgineContext;
     class Game {
         protected:
-            std::vector<std::unique_ptr<Ensemble>> ensembles; 
+            std::unordered_map<std::string, std::unique_ptr<Ensemble>> ensembles; 
+            Graphics::Renderer *ren;
             GelgineContext* ctx;
         public:
             const int width = 800, height = 600;
@@ -28,8 +30,17 @@ namespace Gelgine {
 
             void draw() {
                 for (auto& e : ensembles) {
-                    e->draw();
+                    e.second->draw(*ren);
                 }
+            }
+
+            template<typename T, typename... Args>
+            void addEnsemble(std::string name, Args&&... args) {
+                auto ensemble = std::make_unique<T>(std::forward<Args>(args)...);
+
+                ensembles[name] = std::move(ensemble);
+
+                ensembles[name]->setContext(ctx);
             }
     };
 }
