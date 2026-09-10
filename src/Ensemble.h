@@ -39,6 +39,10 @@ namespace Gelgine {
             void setContext(GelgineContext *c) {
                 ctx = c;
             }
+
+            GelgineContext *getContext() {
+                return ctx;
+            }
             
             virtual void onUpdate() = 0;
             virtual void onFixedUpdate() = 0;
