@@ -11,15 +11,14 @@
 #include "./Context.h"
 
 namespace Gelgine {
+    class Ensemble;
     class GameObject {
         private:
-            GelgineContext *ctx;
+            Ensemble *ensemble;
             std::unordered_map<std::type_index, std::unique_ptr<Component>> components;
 
             std::vector<GraphicsComponent *> renderablePieces;
         public:
-            GameObject(GelgineContext *ctx) : ctx(ctx) {}
-            
             void draw(Graphics::Renderer &ren) {
                 for (auto c : renderablePieces) {
                     c->draw(ren);
@@ -35,8 +34,10 @@ namespace Gelgine {
             template <typename T>
             T& getComponent();
 
-            GelgineContext *getContext() {
-                return ctx;
-            } 
+            void setEnsemble(Ensemble *e) {
+                ensemble = e;
+            }
+
+            GelgineContext *getContext();
     };
 }

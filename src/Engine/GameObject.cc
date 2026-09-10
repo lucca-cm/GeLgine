@@ -1,4 +1,5 @@
 #include "GameObject.h"
+#include "../Ensemble.h"
 
 
 namespace Gelgine {
@@ -26,5 +27,9 @@ namespace Gelgine {
         }
 
         return dynamic_cast<T&>(it->second.get());
+    }
+
+    GelgineContext *GameObject::getContext() {
+        return ensemble->getContext();
     }
 }
