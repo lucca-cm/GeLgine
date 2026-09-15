@@ -7,6 +7,7 @@ namespace Gelgine {
             GameObject *owner;
         public:
             Component(GameObject *owner) : owner(owner) {}
+            virtual ~Component() = default;
             virtual void attach() {};
             virtual void dettach() {};
     };
