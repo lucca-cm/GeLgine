@@ -2,6 +2,7 @@
 
 void Gelgine::Engine::run(Game& game) {
     wm.setWindowSize(game.width, game.height);
+    game.setContext(getContext());
     game.onStart();
     glEnable(GL_DEPTH_TEST);
     wm.initTime();
