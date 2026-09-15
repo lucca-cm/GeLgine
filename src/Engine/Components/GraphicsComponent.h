@@ -6,7 +6,7 @@
 namespace Gelgine {
     class GraphicsComponent : public Component {
         private:
-            bool shouldDraw = false;
+            bool shouldDraw = true;
 
             virtual void drawObject(Graphics::Renderer &ren) = 0;
         public:
