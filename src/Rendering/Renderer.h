@@ -9,6 +9,7 @@
 #include "Shader.h"
 #include "Camera.h"
 #include "Mesh.h"
+#include "Material.h"
 
 namespace Graphics {
     template<typename T>
@@ -16,7 +17,7 @@ namespace Graphics {
     
     class Renderer {
         private:
-            Shader *currentShader = nullptr;
+            std::vector<Camera *> cameras;
             bool isWireframeEnabled = false;
         public:
             void clear(glm::vec4 color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)) {
@@ -34,17 +35,27 @@ namespace Graphics {
                 }
             }
 
-            void begin(Camera& camera, Shader *shader) {
-                currentShader = shader;
-                currentShader->use();
-                camera.uploadToShader(*currentShader);
+            void setCurrentCamera(Camera *camera) {
+                cameras.clear();
+                cameras.push_back(camera);
+            }
+            
+            void addCurrentCamera(Camera *camera) {
+                cameras.push_back(camera);
             }
 
             template<typename... Uniforms>
-            void draw(Mesh& mesh, Uniforms&&... uniforms) {
-                (currentShader->setUniform(uniforms.first, uniforms.second), ...);
+            void draw(Mesh& mesh, Material& material, Uniforms&&... uniforms) {
+                for (auto& camera : cameras) {
+                    auto shader = material.getShader();
+                    shader->use();
+                    camera->updateCamera();
+                    camera->uploadToShader(*shader);
+                    shader->setUniform("model", mesh.getModelMatrix());
+                    (shader->setUniform(uniforms.first, uniforms.second), ...);
 
-                mesh.draw();
+                    mesh.draw();
+                }
             }
     };
 }
