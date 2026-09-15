@@ -19,5 +19,38 @@ namespace Gelgine {
 
             CameraComponent(GameObject *owner) : Component(owner), camera(75.0f, 16.0f/9.0f) {}
 
+            void setCameraAsCurrent() {
+                owner->getContext()->graphics.setCurrentCamera(&camera);
+            }
+
+            void addCameraToCurrent() {
+                owner->getContext()->graphics.addCurrentCamera(&camera);
+            }
+
+            void moveBy(const glm::vec3& deltaPos) {
+                camera.moveBy(deltaPos);
+            }
+            void moveTo(const glm::vec3& pos) {
+                camera.moveTo(pos);
+            }
+
+            void rotateBy(const glm::quat& deltaRot) {
+                camera.rotateBy(deltaRot);
+            }
+            void setRotation(const glm::quat& rotation) {
+                camera.setRotation(rotation);
+            }
+
+            void setAspectRatio(float aspectRatio) {
+                camera.setAspectRatio(aspectRatio);
+            }
+            void setFOV(float fov) {
+                camera.setFOV(fov);
+            }
+            void setClipZone(float near, float far) {
+                camera.setClipZone(near, far);
+            }
+
+ 
     };
 }
