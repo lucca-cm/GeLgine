@@ -40,7 +40,11 @@ namespace Gelgine {
 
                 ensembles[name] = std::move(ensemble);
 
-                ensembles[name]->setContext(ctx);
+                ensembles[name]->setContext(this->ctx);
+            }
+
+            Ensemble *getEnsemble(std::string name) {
+                return ensembles[name].get();
             }
     };
 }
