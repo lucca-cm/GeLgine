@@ -19,6 +19,8 @@ namespace Gelgine {
 
             std::vector<GraphicsComponent *> renderablePieces;
         public:
+            GameObject() = default;
+            explicit GameObject(Ensemble *ensemble) : ensemble(ensemble) {}
             void draw(Graphics::Renderer &ren) {
                 for (auto c : renderablePieces) {
                     c->draw(ren);
@@ -26,14 +28,31 @@ namespace Gelgine {
             }
 
             template <typename T, typename... Args>
-            void addComponent(Args&&... args);
+            void addComponent(Args&&... args) {
+                auto component = std::make_unique<T>(this, std::forward<Args>(args)...);
+
+                if constexpr (std::is_base_of_v<GraphicsComponent, T>) {
+                    renderablePieces.push_back(component.get());
+                }
+                components[typeid(T)] = std::move(component);
+            }
+    
+            template <typename T>
+            void removeComponent() {
+                components.erase(components.find(typeid(T)));
+            }
 
             template <typename T>
-            void removeComponent();
+            T& getComponent() {
+                auto it = components.find(typeid(T));
+                
+                if (it == components.end()) {
+                    throw std::runtime_error("Component not found!");
+                }
 
-            template <typename T>
-            T& getComponent();
-
+                return *dynamic_cast<T*>(it->second.get());
+            }
+        
             void setEnsemble(Ensemble *e) {
                 ensemble = e;
             }
