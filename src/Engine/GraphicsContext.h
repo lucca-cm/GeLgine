@@ -12,13 +12,17 @@ namespace Gelgine {
                 ren->toggleWireFrame();
             }
 
-            void begin(Graphics::Camera& camera, Graphics::Shader* shader) {
-                ren->begin(camera, shader);
+            void setCurrentCamera(Graphics::Camera *camera) {
+                ren->setCurrentCamera(camera);
+            }
+
+            void addCurrentCamera(Graphics::Camera *camera) {
+                ren->addCurrentCamera(camera);
             }
 
             template<typename... Uniforms>
-            void draw(Graphics::Mesh& mesh, Uniforms&&... uniforms) {
-                ren->draw(mesh, std::forward<Uniforms>(uniforms)...);
+            void draw(Graphics::Mesh& mesh, Graphics::Material& material, Uniforms&&... uniforms) {
+                ren->draw(mesh, material, std::forward<Uniforms>(uniforms)...);
             }
             
             Graphics::Geometry::MeshData createBox(glm::vec3 halfExtents) {
